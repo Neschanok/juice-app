@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Joe & You | Byg din juice</title>
+  <link rel="stylesheet" href="./styles.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"/>
+</head>
+<body class="joe-bg">
+  <!-- Topbar -->
+  <header class="topbar">
+    <div class="brand-inline">
+      <div class="brand-circle sm">J</div>
+      <span class="brand-name">Joe & You</span>
+    </div>
+    <div class="userbox">
+      <span id="userEmail" class="user-email"></span>
+      <button id="signOutBtn" class="btn ghost"><i class="fa-solid fa-right-from-bracket"></i> Log ud</button>
+    </div>
+  </header>
+
+  <!-- Main grid -->
+  <main class="juice-grid">
+    <!-- Builder panel -->
+    <section class="panel">
+      <h2>DIY: Byg din juice</h2>
+      <p class="muted">Vælg 1 base, op til 3 frugter/grønt og valgfri boosters.</p>
+
+      <div class="builder">
+        <div class="group">
+          <h3>Base (vælg 1)</h3>
+          <div class="chip-wrap" id="baseWrap"></div>
+        </div>
+
+        <div class="group">
+          <h3>Frugter & grønt (op til 3)</h3>
+          <div class="chip-wrap" id="fruitsWrap"></div>
+        </div>
+
+        <div class="group">
+          <h3>Boosters</h3>
+          <div class="chip-wrap" id="boostersWrap"></div>
+        </div>
+      </div>
+
+      <div class="summary">
+        <div>
+          <div class="sum-line"><span>Base</span><span id="sumBase">—</span></div>
+          <div class="sum-line"><span>Valg</span><span id="sumChoices">0</span></div>
+          <div class="sum-line"><span>Boosters</span><span id="sumBoosters">0</span></div>
+        </div>
+        <div class="total">
+          <span>Pris</span>
+          <strong id="sumPrice">0 kr</strong>
+        </div>
+      </div>
+
+      <div class="actions">
+        <input id="juiceName" class="name-input" type="text" placeholder="Giv din juice et navn (valgfrit)"/>
+        <button id="saveBtn" class="btn primary"><i class="fa-solid fa-floppy-disk"></i> Gem min juice</button>
+        <div class="message" id="saveMsg" aria-live="polite"></div>
+      </div>
+    </section>
+
+    <!-- Saved panel -->
+    <section class="panel">
+      <h2>Dine gemte juices</h2>
+      <div id="savedList" class="saved-list empty">
+        <p class="muted">Ingen gemte endnu.</p>
+      </div>
+    </section>
+  </main>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.3.1/firebase-app.js";
+    import {
+      getAuth,
+      onAuthStateChanged,
+      signOut
+    } from "https://www.gstatic.com/firebasejs/11.3.1/firebase-auth.js";
+
+     const firebaseConfig = {
+    apiKey: "AIzaSyCdOMx7S8hZGZ623h1cHoFrPM9aCoP-EJc",
+    authDomain: "joenthejuice.firebaseapp.com",
+    projectId: "joenthejuice",
+    storageBucket: "joenthejuice.firebasestorage.app",
+    messagingSenderId: "643159152845",
+    appId: "1:643159152845:web:a22123ca62594d961af184"
+  };
+
+    // Init Firebase
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    // Auth guard
+    const userEmailEl = document.getElementById("userEmail");
+    onAuthStateChanged(auth, (user) => {
+      if (!user) {
+        window.location.href = "./index.html";
+      } else {
+        userEmailEl.textContent = user.email ?? "Logged in";
+        loadSaved(); // hent gemte fra localStorage for denne bruger
+      }
+    });
+
+    // Log ud
+    document.getElementById("signOutBtn").addEventListener("click", async () => {
+      await signOut(auth);
+      window.location.href = "./index.html";
+    });
+
+    // Ingrediensdata (priser er illustrative – justér frit)
+    const DATA = {
+      base: [
+        { id:"apple",   label:"Apple",   price:22 },
+        { id:"orange",  label:"Orange",  price:24 },
+        { id:"carrot",  label:"Carrot",  price:24 },
+        { id:"celery",  label:"Celery",  price:24 }
+      ],
+      fruits: [
+        { id:"strawberry", label:"Strawberry", price:6 },
+        { id:"banana",     label:"Banana",     price:5 },
+        { id:"blueberry",  label:"Blueberry",  price:7 },
+        { id:"pineapple",  label:"Pineapple",  price:6 },
+        { id:"lemon",      label:"Lemon",      price:3 },
+        { id:"ginger",     label:"Ginger",     price:4 },
+        { id:"spinach",    label:"Spinach",    price:4 },
+        { id:"cucumber",   label:"Cucumber",   price:4 }
+      ],
+      boosters: [
+        { id:"protein",  label:"Protein",   price:10 },
+        { id:"collagen", label:"Collagen",  price:10 },
+        { id:"creatine", label:"Creatine",  price:10 },
+        { id:"espresso", label:"Espresso",  price:8 },
+        { id:"mint",     label:"Mint",      price:4 }
+      ],
+      limits: {
+        fruits: 3
+      }
+    };
+
+    // UI refs
+    const baseWrap     = document.getElementById("baseWrap");
+    const fruitsWrap   = document.getElementById("fruitsWrap");
+    const boostersWrap = document.getElementById("boostersWrap");
+
+    const sumBase     = document.getElementById("sumBase");
+    const sumChoices  = document.getElementById("sumChoices");
+    const sumBoosters = document.getElementById("sumBoosters");
+    const sumPrice    = document.getElementById("sumPrice");
+
+    const saveBtn     = document.getElementById("saveBtn");
+    const saveMsg     = document.getElementById("saveMsg");
+    const juiceNameEl = document.getElementById("juiceName");
+    const savedList   = document.getElementById("savedList");
+
+    // State
+    const state = {
+      base: null,
+      fruits: new Set(),
+      boosters: new Set()
+    };
+
+    // Render helper: chip
+    function chip({id,label,price}, type) {
+      const el = document.createElement("button");
+      el.type = "button";
+      el.className = "chip";
+      el.dataset.id = id;
+      el.dataset.type = type;
+      el.innerHTML = `<span>${label}</span><small>${price} kr</small>`;
+      return el;
+    }
+
+    // Render alle chip-grupper
+    function render() {
+      baseWrap.innerHTML = "";
+      DATA.base.forEach(b => baseWrap.appendChild(chip(b, "base")));
+
+      fruitsWrap.innerHTML = "";
+      DATA.fruits.forEach(f => fruitsWrap.appendChild(chip(f, "fruits")));
+
+      boostersWrap.innerHTML = "";
+      DATA.boosters.forEach(b => boostersWrap.appendChild(chip(b, "boosters")));
+
+      // Bind klik
+      document.querySelectorAll(".chip").forEach(c => {
+        c.addEventListener("click", () => toggle(c.dataset.type, c.dataset.id));
+      });
+
+      refreshActive();
+    }
+
+    // Toggle-valg
+    function toggle(type, id) {
+      if (type === "base") {
+        state.base = (state.base === id) ? null : id;
+      } else if (type === "fruits") {
+        if (state.fruits.has(id)) {
+          state.fruits.delete(id);
+        } else {
+          if (state.fruits.size >= DATA.limits.fruits) {
+            toast("Du kan maks. vælge 3 frugter/grønt.", "error");
+            return;
+          }
+          state.fruits.add(id);
+        }
+      } else if (type === "boosters") {
+        if (state.boosters.has(id)) state.boosters.delete(id);
+        else state.boosters.add(id);
+      }
+      refreshActive();
+      updateSummary();
+    }
+
+    // Aktiv-styling
+    function refreshActive() {
+      document.querySelectorAll(".chip").forEach(c => c.classList.remove("active"));
+      if (state.base) {
+        baseWrap.querySelector(`.chip[data-id="${state.base}"]`)?.classList.add("active");
+      }
+      state.fruits.forEach(id => {
+        fruitsWrap.querySelector(`.chip[data-id="${id}"]`)?.classList.add("active");
+      });
+      state.boosters.forEach(id => {
+        boostersWrap.querySelector(`.chip[data-id="${id}"]`)?.classList.add("active");
+      });
+    }
+
+    // Opsummering/pris
+    function updateSummary() {
+      const find = (arr,id) => arr.find(x=>x.id===id);
+
+      let price = 0;
+      let baseText = "—";
+
+      if (state.base) {
+        const b = find(DATA.base, state.base);
+        if (b) { price += b.price; baseText = `${b.label} (${b.price} kr)`; }
+      }
+
+      let fruitsCount = 0;
+      state.fruits.forEach(id => {
+        const f = find(DATA.fruits, id);
+        if (f) { price += f.price; fruitsCount++; }
+      });
+
+      let boostersCount = 0;
+      state.boosters.forEach(id => {
+        const b = find(DATA.boosters, id);
+        if (b) { price += b.price; boostersCount++; }
+      });
+
+      sumBase.textContent = baseText;
+      sumChoices.textContent = String(fruitsCount);
+      sumBoosters.textContent = String(boostersCount);
+      sumPrice.textContent = price + " kr";
+    }
+
+    // Beskeder
+    function toast(text, type="info"){
+      saveMsg.textContent = text;
+      saveMsg.className = "message " + type;
+      setTimeout(()=> {
+        saveMsg.textContent = "";
+        saveMsg.className = "message";
+      }, 2200);
+    }
+
+    // Gem/indlæs (localStorage pr. bruger)
+    const KEY = "joe:myjuices";
+    function storageKey(){
+      const u = auth.currentUser?.uid ?? "anon";
+      return KEY + ":" + u;
+    }
+
+    function loadSaved(){
+      const raw = localStorage.getItem(storageKey());
+      const arr = raw ? JSON.parse(raw) : [];
+      renderSaved(arr);
+    }
+
+    function saveCurrent(){
+      if (!state.base) return toast("Vælg mindst en base.", "error");
+
+      const obj = {
+        id: "j" + Date.now(),
+        name: (juiceNameEl.value.trim() || "Min juice"),
+        base: state.base,
+        fruits: Array.from(state.fruits),
+        boosters: Array.from(state.boosters),
+        price: sumPrice.textContent
+      };
+
+      const raw = localStorage.getItem(storageKey());
+      const arr = raw ? JSON.parse(raw) : [];
+      arr.unshift(obj);
+      localStorage.setItem(storageKey(), JSON.stringify(arr));
+      renderSaved(arr);
+
+      juiceNameEl.value = "";
+      toast("Juice gemt!", "success");
+    }
+
+    function renderSaved(list){
+      savedList.classList.toggle("empty", list.length === 0);
+      savedList.innerHTML = "";
+      if (list.length === 0) {
+        savedList.innerHTML = `<p class="muted">Ingen gemte endnu.</p>`;
+        return;
+      }
+      list.forEach(item => {
+        const row = document.createElement("div");
+        row.className = "saved-row";
+        row.innerHTML = `
+          <div>
+            <strong>${item.name}</strong>
+            <div class="tiny">
+              Base: ${labelOf(item.base, DATA.base)} • 
+              Frugter: ${item.fruits.map(id=>labelOf(id, DATA.fruits)).join(", ")||"—"} • 
+              Boosters: ${item.boosters.map(id=>labelOf(id, DATA.boosters)).join(", ")||"—"}
+            </div>
+          </div>
+          <div class="price">${item.price}</div>
+          <button class="icon-btn" data-id="${item.id}" title="Slet">
+            <i class="fa-regular fa-trash-can"></i>
+          </button>
+        `;
+        savedList.appendChild(row);
+      });
+
+      // bind delete
+      savedList.querySelectorAll(".icon-btn").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const id = btn.dataset.id;
+          const raw = localStorage.getItem(storageKey());
+          const arr = raw ? JSON.parse(raw) : [];
+          const next = arr.filter(x=>x.id!==id);
+          localStorage.setItem(storageKey(), JSON.stringify(next));
+          renderSaved(next);
+        });
+      });
+    }
+
+    function labelOf(id, arr) {
+      return arr.find(x=>x.id===id)?.label ?? id;
+    }
+
+    // Bind & init
+    document.getElementById("saveBtn").addEventListener("click", saveCurrent);
+    render();
+    updateSummary();
+  </script>
+</body>
+</html>

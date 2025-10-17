@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Joe & You | Login</title>
+  <link rel="stylesheet" href="./styles.css"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer"/>
+</head>
+<body class="joe-bg">
+  <main class="auth-wrap">
+    <div class="brand">
+      <div class="brand-circle">J</div>
+      <h1>Joe & You</h1>
+      <p class="brand-sub">Mix it. Sip it. Love it.</p>
+    </div>
+
+    <div class="auth-card">
+      <div class="tabs">
+        <button class="tab active" data-tab="login">Login</button>
+        <button class="tab" data-tab="signup">Signup</button>
+      </div>
+
+      <!-- LOGIN -->
+      <form class="form" id="loginForm" autocomplete="on">
+        <div class="input_box">
+          <i class="fa-solid fa-envelope"></i>
+          <input type="email" id="loginEmail" placeholder="Email" required autocomplete="email"/>
+        </div>
+        <div class="input_box">
+          <i class="fa-solid fa-lock"></i>
+          <input type="password" id="loginPassword" placeholder="Password" required autocomplete="current-password"/>
+          <i class="fa-regular fa-eye toggle-pass" data-target="loginPassword"></i>
+        </div>
+
+        <div class="options">
+          <label class="remember">
+            <input type="checkbox" id="rememberLogin"/> Husk mig
+          </label>
+          <a href="#" id="forgotLink">Glemt kode?</a>
+        </div>
+
+        <button type="submit" class="btn primary" id="loginBtn">Login</button>
+        <div class="message" id="loginMsg" aria-live="polite"></div>
+      </form>
+
+      <!-- SIGNUP -->
+      <form class="form hidden" id="signupForm" autocomplete="on">
+        <div class="input_box">
+          <i class="fa-solid fa-envelope"></i>
+          <input type="email" id="signupEmail" placeholder="Email" required autocomplete="email"/>
+        </div>
+        <div class="input_box">
+          <i class="fa-solid fa-lock"></i>
+          <input type="password" id="signupPassword" placeholder="Password (min. 6 tegn)" required minlength="6" autocomplete="new-password"/>
+          <i class="fa-regular fa-eye toggle-pass" data-target="signupPassword"></i>
+        </div>
+        <button type="submit" class="btn secondary" id="signupBtn">Opret konto</button>
+        <div class="message" id="signupMsg" aria-live="polite"></div>
+      </form>
+    </div>
+
+    <footer class="footnote">
+      <span>Powered by Firebase</span>
+    </footer>
+  </main>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.3.1/firebase-app.js";
+    import {
+      getAuth,
+      createUserWithEmailAndPassword,
+      signInWithEmailAndPassword,
+      sendPasswordResetEmail,
+      setPersistence,
+      browserLocalPersistence,
+      browserSessionPersistence,
+      onAuthStateChanged,
+    } from "https://www.gstatic.com/firebasejs/11.3.1/firebase-auth.js";
+
+     const firebaseConfig = {
+    apiKey: "AIzaSyCdOMx7S8hZGZ623h1cHoFrPM9aCoP-EJc",
+    authDomain: "joenthejuice.firebaseapp.com",
+    projectId: "joenthejuice",
+    storageBucket: "joenthejuice.firebasestorage.app",
+    messagingSenderId: "643159152845",
+    appId: "1:643159152845:web:a22123ca62594d961af184"
+  };
+
+    // Init
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    // Tabs
+    const tabs = document.querySelectorAll(".tab");
+    const loginForm = document.getElementById("loginForm");
+    const signupForm = document.getElementById("signupForm");
+    const loginMsg = document.getElementById("loginMsg");
+    const signupMsg = document.getElementById("signupMsg");
+    const rememberLogin = document.getElementById("rememberLogin");
+    const forgotLink = document.getElementById("forgotLink");
+
+    tabs.forEach(t => t.addEventListener("click", () => {
+      tabs.forEach(x => x.classList.remove("active"));
+      t.classList.add("active");
+      const tab = t.dataset.tab;
+      if (tab === "login") {
+        loginForm.classList.remove("hidden");
+        signupForm.classList.add("hidden");
+      } else {
+        signupForm.classList.remove("hidden");
+        loginForm.classList.add("hidden");
+      }
+      clearMessages();
+    }));
+
+    // Toggle password icons
+    document.querySelectorAll(".toggle-pass").forEach(icon => {
+      icon.addEventListener("click", () => {
+        const id = icon.dataset.target;
+        const input = document.getElementById(id);
+        const isPwd = input.type === "password";
+        input.type = isPwd ? "text" : "password";
+        icon.classList.toggle("fa-eye");
+        icon.classList.toggle("fa-eye-slash");
+      });
+    });
+
+    const setAuthPersistenceMode = async (remember) => {
+      await setPersistence(auth, remember ? browserLocalPersistence : browserSessionPersistence);
+    };
+
+    const showMsg = (el, text, type="info") => {
+      el.textContent = text;
+      el.className = "message " + type;
+    };
+    const clearMessages = () => {
+      loginMsg.textContent = "";
+      signupMsg.textContent = "";
+      loginMsg.className = "message";
+      signupMsg.className = "message";
+    };
+
+    // LOGIN
+    loginForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      clearMessages();
+      const email = document.getElementById("loginEmail").value.trim();
+      const pwd = document.getElementById("loginPassword").value;
+
+      if (!/\S+@\S+\.\S+/.test(email)) return showMsg(loginMsg, "Tjek din email-format.", "error");
+      if (!pwd) return showMsg(loginMsg, "Indtast din adgangskode.", "error");
+
+      try {
+        loginForm.querySelector("button").disabled = true;
+        await setAuthPersistenceMode(rememberLogin.checked);
+        await signInWithEmailAndPassword(auth, email, pwd);
+        showMsg(loginMsg, "Du er logget ind. Sender dig videre …", "success");
+        window.location.href = "./juice.html";
+      } catch (err) {
+        handleAuthError(err, loginMsg);
+      } finally {
+        loginForm.querySelector("button").disabled = false;
+      }
+    });
+
+    // SIGNUP
+    signupForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      clearMessages();
+      const email = document.getElementById("signupEmail").value.trim();
+      const pwd = document.getElementById("signupPassword").value;
+
+      if (!/\S+@\S+\.\S+/.test(email)) return showMsg(signupMsg, "Tjek din email-format.", "error");
+      if (!pwd || pwd.length < 6) return showMsg(signupMsg, "Kode skal være mindst 6 tegn.", "error");
+
+      try {
+        signupForm.querySelector("button").disabled = true;
+        // persistence styres kun for login, men du kan også vælge at sætte den her hvis du vil
+        await createUserWithEmailAndPassword(auth, email, pwd);
+        showMsg(signupMsg, "Konto oprettet! Du kan nu logge ind.", "success");
+        // Hop automatisk til login-tab
+        document.querySelector('.tab[data-tab="login"]').click();
+      } catch (err) {
+        handleAuthError(err, signupMsg);
+      } finally {
+        signupForm.querySelector("button").disabled = false;
+      }
+    });
+
+    // Glemt kode
+    forgotLink.addEventListener("click", async (e) => {
+      e.preventDefault();
+      const email = document.getElementById("loginEmail").value.trim();
+      if (!/\S+@\S+\.\S+/.test(email)) {
+        return showMsg(loginMsg, "Skriv din email i feltet først.", "error");
+      }
+      try {
+        await sendPasswordResetEmail(auth, email);
+        showMsg(loginMsg, "Reset-mail er sendt.", "success");
+      } catch (err) {
+        handleAuthError(err, loginMsg);
+      }
+    });
+
+    // Hvis allerede logget ind → videre til juice
+    onAuthStateChanged(auth, (user) => {
+      if (user) window.location.href = "./juice.html";
+    });
+
+    function handleAuthError(error, targetEl){
+      const code = error?.code || "";
+      const map = {
+        "auth/email-already-in-use": "Denne email er allerede registreret.",
+        "auth/invalid-email": "Email-format er ugyldigt.",
+        "auth/weak-password": "Kode skal være mindst 6 tegn.",
+        "auth/invalid-credential": "Forkert email eller kode.",
+        "auth/wrong-password": "Forkert email eller kode.",
+        "auth/user-not-found": "Ingen bruger fundet med denne email."
+      };
+      const msg = map[code] || "Noget gik galt. Prøv igen.";
+      showMsg(targetEl, msg, "error");
+      console.error(error);
+    }
+  </script>
+</body>
+</html>
