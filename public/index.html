@@ -3,70 +3,81 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Joe & You | Login</title>
+  <title>Understory | Login</title>
+
+  <!-- Tema & ikoner -->
   <link rel="stylesheet" href="./styles.css"/>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer"/>
+  <meta name="theme-color" content="#0b0b0c">
 </head>
+
 <body class="joe-bg">
   <main class="auth-wrap">
-    <div class="brand">
-      <div class="brand-circle">J</div>
-      <h1>Joe & You</h1>
-      <p class="brand-sub">Mix it. Sip it. Love it.</p>
-    </div>
+    <!-- Branding -->
+    <section class="brand">
+      <div class="brand-circle">U</div>
+      <h1>Understory</h1>
+    </section>
 
-    <div class="auth-card">
-      <div class="tabs">
-        <button class="tab active" data-tab="login">Login</button>
-        <button class="tab" data-tab="signup">Signup</button>
+    <!-- Login/Signup-kort -->
+    <section class="auth-card" role="region" aria-label="Login og tilmelding">
+      <div class="tabs" role="tablist" aria-label="Skift mellem login og signup">
+        <button class="tab active" data-tab="login" role="tab" aria-selected="true" aria-controls="loginPanel" id="loginTab">Login</button>
+        <button class="tab" data-tab="signup" role="tab" aria-selected="false" aria-controls="signupPanel" id="signupTab">Signup</button>
       </div>
 
       <!-- LOGIN -->
-      <form class="form" id="loginForm" autocomplete="on">
-        <div class="input_box">
-          <i class="fa-solid fa-envelope"></i>
-          <input type="email" id="loginEmail" placeholder="Email" required autocomplete="email"/>
-        </div>
-        <div class="input_box">
-          <i class="fa-solid fa-lock"></i>
-          <input type="password" id="loginPassword" placeholder="Password" required autocomplete="current-password"/>
-          <i class="fa-regular fa-eye toggle-pass" data-target="loginPassword"></i>
-        </div>
+      <div id="loginPanel" role="tabpanel" aria-labelledby="loginTab">
+        <form class="form" id="loginForm" autocomplete="on">
+          <div class="input_box">
+            <i class="fa-solid fa-envelope" aria-hidden="true"></i>
+            <input type="email" id="loginEmail" placeholder="Email" required autocomplete="email" inputmode="email"/>
+            <span aria-hidden="true"></span>
+          </div>
 
-        <div class="options">
-          <label class="remember">
-            <input type="checkbox" id="rememberLogin"/> Husk mig
-          </label>
-          <a href="#" id="forgotLink">Glemt kode?</a>
-        </div>
+          <div class="input_box">
+            <i class="fa-solid fa-lock" aria-hidden="true"></i>
+            <input type="password" id="loginPassword" placeholder="Password" required autocomplete="current-password"/>
+            <i class="fa-regular fa-eye toggle-pass" data-target="loginPassword" title="Vis/skjul kode" aria-label="Vis eller skjul kode"></i>
+          </div>
 
-        <button type="submit" class="btn primary" id="loginBtn">Login</button>
-        <div class="message" id="loginMsg" aria-live="polite"></div>
-      </form>
+          <div class="options">
+            <label><input type="checkbox" id="rememberLogin"> Husk mig</label>
+            <a href="#" id="forgotLink">Glemt kode?</a>
+          </div>
+
+          <button type="submit" class="btn primary" id="loginBtn">Login</button>
+          <div class="message" id="loginMsg" aria-live="polite"></div>
+        </form>
+      </div>
 
       <!-- SIGNUP -->
-      <form class="form hidden" id="signupForm" autocomplete="on">
-        <div class="input_box">
-          <i class="fa-solid fa-envelope"></i>
-          <input type="email" id="signupEmail" placeholder="Email" required autocomplete="email"/>
-        </div>
-        <div class="input_box">
-          <i class="fa-solid fa-lock"></i>
-          <input type="password" id="signupPassword" placeholder="Password (min. 6 tegn)" required minlength="6" autocomplete="new-password"/>
-          <i class="fa-regular fa-eye toggle-pass" data-target="signupPassword"></i>
-        </div>
-        <button type="submit" class="btn secondary" id="signupBtn">Opret konto</button>
-        <div class="message" id="signupMsg" aria-live="polite"></div>
-      </form>
-    </div>
+      <div id="signupPanel" class="hidden" role="tabpanel" aria-labelledby="signupTab">
+        <form class="form" id="signupForm" autocomplete="on">
+          <div class="input_box">
+            <i class="fa-solid fa-envelope" aria-hidden="true"></i>
+            <input type="email" id="signupEmail" placeholder="Email" required autocomplete="email" inputmode="email"/>
+            <span aria-hidden="true"></span>
+          </div>
 
-    <footer class="footnote">
-      <span>Powered by Firebase</span>
-    </footer>
+          <div class="input_box">
+            <i class="fa-solid fa-lock" aria-hidden="true"></i>
+            <input type="password" id="signupPassword" placeholder="Password (min. 6 tegn)" required minlength="6" autocomplete="new-password"/>
+            <i class="fa-regular fa-eye toggle-pass" data-target="signupPassword" title="Vis/skjul kode" aria-label="Vis eller skjul kode"></i>
+          </div>
+
+          <button type="submit" class="btn secondary" id="signupBtn">Opret konto</button>
+          <div class="message" id="signupMsg" aria-live="polite"></div>
+        </form>
+      </div>
+    </section>
+
+    <footer class="footnote">Powered by Firebase</footer>
   </main>
 
+  <!-- Firebase Auth -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.3.1/firebase-app.js";
     import {
@@ -80,21 +91,25 @@
       onAuthStateChanged,
     } from "https://www.gstatic.com/firebasejs/11.3.1/firebase-auth.js";
 
-     const firebaseConfig = {
-    apiKey: "AIzaSyCdOMx7S8hZGZ623h1cHoFrPM9aCoP-EJc",
-    authDomain: "joenthejuice.firebaseapp.com",
-    projectId: "joenthejuice",
-    storageBucket: "joenthejuice.firebasestorage.app",
-    messagingSenderId: "643159152845",
-    appId: "1:643159152845:web:a22123ca62594d961af184"
-  };
+    // 🔑 Udfyld med dine egne nøgler (fra Firebase Console)
+    const firebaseConfig = {
+   apiKey: "AIzaSyAps2Jve2RE3InZyo_q9MTJ0JtKffDNe1E",
+    authDomain: "understorychat.firebaseapp.com",
+    projectId: "understorychat",
+    storageBucket: "understorychat.firebasestorage.app",
+    messagingSenderId: "1037413097995",
+    appId: "1:1037413097995:web:ddde8b7775db96650e9d0e",
+    measurementId: "G-T4SCFB2SZ5"
+    };
 
     // Init
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
 
-    // Tabs
+    // Elementer
     const tabs = document.querySelectorAll(".tab");
+    const loginPanel = document.getElementById("loginPanel");
+    const signupPanel = document.getElementById("signupPanel");
     const loginForm = document.getElementById("loginForm");
     const signupForm = document.getElementById("signupForm");
     const loginMsg = document.getElementById("loginMsg");
@@ -102,21 +117,20 @@
     const rememberLogin = document.getElementById("rememberLogin");
     const forgotLink = document.getElementById("forgotLink");
 
+    // Tab-skift
     tabs.forEach(t => t.addEventListener("click", () => {
-      tabs.forEach(x => x.classList.remove("active"));
-      t.classList.add("active");
-      const tab = t.dataset.tab;
-      if (tab === "login") {
-        loginForm.classList.remove("hidden");
-        signupForm.classList.add("hidden");
-      } else {
-        signupForm.classList.remove("hidden");
-        loginForm.classList.add("hidden");
-      }
+      const isLogin = t.dataset.tab === "login";
+      tabs.forEach(x => {
+        const active = x === t;
+        x.classList.toggle("active", active);
+        x.setAttribute("aria-selected", String(active));
+      });
+      loginPanel.classList.toggle("hidden", !isLogin);
+      signupPanel.classList.toggle("hidden", isLogin);
       clearMessages();
     }));
 
-    // Toggle password icons
+    // Toggle password
     document.querySelectorAll(".toggle-pass").forEach(icon => {
       icon.addEventListener("click", () => {
         const id = icon.dataset.target;
@@ -128,10 +142,7 @@
       });
     });
 
-    const setAuthPersistenceMode = async (remember) => {
-      await setPersistence(auth, remember ? browserLocalPersistence : browserSessionPersistence);
-    };
-
+    // Hjælpere
     const showMsg = (el, text, type="info") => {
       el.textContent = text;
       el.className = "message " + type;
@@ -143,11 +154,16 @@
       signupMsg.className = "message";
     };
 
+    // Persistence (Husk mig)
+    const setAuthPersistenceMode = async (remember) => {
+      await setPersistence(auth, remember ? browserLocalPersistence : browserSessionPersistence);
+    };
+
     // LOGIN
     loginForm.addEventListener("submit", async (e) => {
       e.preventDefault();
       clearMessages();
-      const email = document.getElementById("loginEmail").value.trim();
+      const email = (document.getElementById("loginEmail").value || "").trim();
       const pwd = document.getElementById("loginPassword").value;
 
       if (!/\S+@\S+\.\S+/.test(email)) return showMsg(loginMsg, "Tjek din email-format.", "error");
@@ -158,7 +174,7 @@
         await setAuthPersistenceMode(rememberLogin.checked);
         await signInWithEmailAndPassword(auth, email, pwd);
         showMsg(loginMsg, "Du er logget ind. Sender dig videre …", "success");
-        window.location.href = "./juice.html";
+        window.location.href = "./home.html";
       } catch (err) {
         handleAuthError(err, loginMsg);
       } finally {
@@ -170,7 +186,7 @@
     signupForm.addEventListener("submit", async (e) => {
       e.preventDefault();
       clearMessages();
-      const email = document.getElementById("signupEmail").value.trim();
+      const email = (document.getElementById("signupEmail").value || "").trim();
       const pwd = document.getElementById("signupPassword").value;
 
       if (!/\S+@\S+\.\S+/.test(email)) return showMsg(signupMsg, "Tjek din email-format.", "error");
@@ -178,10 +194,8 @@
 
       try {
         signupForm.querySelector("button").disabled = true;
-        // persistence styres kun for login, men du kan også vælge at sætte den her hvis du vil
         await createUserWithEmailAndPassword(auth, email, pwd);
         showMsg(signupMsg, "Konto oprettet! Du kan nu logge ind.", "success");
-        // Hop automatisk til login-tab
         document.querySelector('.tab[data-tab="login"]').click();
       } catch (err) {
         handleAuthError(err, signupMsg);
@@ -193,7 +207,7 @@
     // Glemt kode
     forgotLink.addEventListener("click", async (e) => {
       e.preventDefault();
-      const email = document.getElementById("loginEmail").value.trim();
+      const email = (document.getElementById("loginEmail").value || "").trim();
       if (!/\S+@\S+\.\S+/.test(email)) {
         return showMsg(loginMsg, "Skriv din email i feltet først.", "error");
       }
@@ -205,11 +219,12 @@
       }
     });
 
-    // Hvis allerede logget ind → videre til juice
+    // Hvis allerede logget ind → videre til home
     onAuthStateChanged(auth, (user) => {
-      if (user) window.location.href = "./juice.html";
+      if (user) window.location.href = "./home.html";
     });
 
+    // Fejlkoder → dansk besked
     function handleAuthError(error, targetEl){
       const code = error?.code || "";
       const map = {
