@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Kalender</title>
     <link rel="stylesheet" href="./styles.css"/>
-    <script src="https://kit.fontawesome.com/bd587e2beb.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 <body>
     <div class="container">
@@ -16,13 +16,43 @@
             <nav>
                 <ul>
                     <li><i class="fa-regular fa-house"></i> Home</li>
-                    <li><a href="calender.html" target="_blank"><i class="fa-regular fa-calendar"></i>&nbsp;Kalender</a></li>
-                    <li><i class="fa-solid fa-ticket"></i> Oplevelser</li>
-                    <li><i class="fa-solid fa-receipt"></i> Salg</li>
+                <li><a href="calender.html" target="_blank"><i class="fa-regular fa-calendar"></i>&nbsp;Kalender</a></li>
+                <li><a href="oplevelser.html" target="_blank"><i class="fa-solid fa-ticket"></i> Oplevelser</a></li>
+                <li><a href="sales.html" target="_blank"><i class="fa-solid fa-receipt"></i> Salg</a></li>
                     <li><i class="fa-solid fa-store"></i> Hjemmeside</li>
                     <li><i class="fa-solid fa-chart-line"></i> Udvikling</li>
                 </ul>
             </nav>
         </section>
+        <div class="kalender-container">
+            <div class="left">
+                <div class="kalender">
+                    <div class="måned">
+                        <i class="fa fa-angle-left prev"></i>
+                        <div class="date"></div>
+                        <i class="fa fa-angle-right next"></i>
+                    </div>
+                    <div class="ugedage">
+                        <div>man</div>                       
+                        <div>tir</div>
+                        <div>ons</div>
+                        <div>tor</div>
+                        <div>fre</div>
+                        <div>lør</div>
+                        <div>søn</div>
+                    </div>
+                    <div class="dage"></div>
+                    <div class="goto-idag">
+                        <div class="goto">
+                            <input type="text" placeholder="mm/yyyy" class="date-input">
+                            <button class="goto-btn">go</button>
+                        </div>
+                        <button class="idag-btn">I dag</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="kalender.js" defer></script>
 </body>
 </html>

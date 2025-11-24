@@ -346,7 +346,7 @@ a:focus-visible {
   grid-template-columns: 300px 1fr;
   grid-template-rows: auto 1fr;
   height: 100vh;
-  background-color: #d5dfca;
+  background-color: #022c12;
 }
 
 .overskrift-logo {
@@ -395,7 +395,7 @@ a:focus-visible {
 .indholdoverskrift {
   grid-column: 2 / 3;
   grid-row: 1 / 2;
-  color: #234923;
+  color: #f1f97e;
   padding-left: 30px;
   font-size: 35px;
 }
@@ -417,7 +417,7 @@ a:focus-visible {
   border-radius: 25px;
   margin: 30px;
   margin-top: 0px;
-  
+  color: #380c0f;
 }
 
 .salg_graf {
@@ -446,11 +446,10 @@ a:focus-visible {
 .beløb {
   font-size: 50px;
   font-weight: 500;
-  color: #380c0f;
 }
 
 .salg-detaljer ul {
-  margin-top: 130px;
+  margin-top: 100px;
   padding-left: 0px;
 }
 
@@ -465,3 +464,272 @@ a:focus-visible {
   padding-bottom: 20px;
 }
 
+/*Oplevelse styling*/
+.tab {
+  overflow: auto;
+  border: 1px solid #ccc;
+  background-color: #f1f1f1; 
+  border-radius: 0;
+
+}
+
+.tab button {
+  background-color: inherit;
+  float: left;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  padding: 14px 16px;
+  transition: 0.3s;
+  color: 022c12;
+  font-weight: bolder;
+  font-size: 19px;
+}
+
+.tab button:hover {
+  background-color: #ddd;
+}
+
+.tab button.active {
+  background-color: #ccc;
+}
+
+.tabcontent {
+  display: none;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  padding: 6px 12px;
+  border-top: none;
+  margin-top: 60px;
+
+}
+
+div.oplevelse-item {
+  margin: 5px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 5px;
+  display: flex;
+  align-items: top;
+  gap: 15px;
+  width: 100%;
+}
+
+.oplevelse-item img {
+  width: 300px;
+  height: auto;
+  border-radius: 5px;
+}
+
+
+.oplevelse {
+  font-size: 17px;
+  font-weight: bold;
+  color: #022c12;
+}
+
+div.oplevelse-item:hover {
+  border: 1px solid #777;
+}
+
+div.oplevelse-item div.desc {
+  padding: 15px;
+  text-align: center;
+}
+
+/*Styling til kalender*/
+.kalender-container {
+  position: relative;
+  width: 1000px;
+  min-height: 800px;
+  margin: 0 auto;
+  padding: 5px;
+  color: #022c12;
+  display: flex;
+  border-radius: 10px;
+  background-color: #d1bee7;
+}
+
+.left {
+  width: 100%;
+  padding: 20px;
+}
+
+.kalender {
+  position: relative;
+  width: 95%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  color: #022c12;
+  border-radius: 6px;
+  background-color: white;
+}
+
+.kalender::before,
+.kalender::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 100%;
+  width: 12px;
+  height: 98%;
+  border-radius: 0 5px 5px 0;
+  background-color: rgb(240, 236, 236);
+  transform: translateY(-50%);
+}
+
+.kalender::before {
+  height: 94%;
+  left: calc(100% + 12px);
+  background-color: rgb(228, 224, 224);
+}
+
+.kalender .måned {
+  width: 100%;
+  height: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 50px;
+  font-size: 1.2rem;
+  font-weight: 500;
+  text-transform: capitalize;
+}
+
+.kalender .måned .prev:hover,
+.kalender .måned .next:hover {
+  color: #d1bee7;
+}
+
+.kalender .ugedage {
+  width: 100%;
+  height: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+  font-size: 1rem;
+  font-weight: 500;
+  text-transform: capitalize; 
+}
+
+.kalender .ugedage div {
+  width: 14.25%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.kalender .dage {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 1px;
+  padding: 0 20px;
+  font-size: 1rem;
+  font-weight:500;
+  margin-bottom: 20px;
+}
+.kalender .dage .dag {
+  height: 110px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: #380c0f;
+  border: 1px solid #f5f5f5;
+}
+
+.kalender .dag:not(.prev-date):hover {
+  color: white;
+  background-color: #022c12;
+}
+.kalender .dage .prev-date {
+  color: #022c12;
+}
+.kalender .dage .active {
+  position: relative;
+  font-size: 2rem;
+  padding: 15px;
+  color: white;
+  background-color:#d1bee7;
+}
+.kalender .dage .active::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  box-shadow: 0 0 10px 3px #d1bee7;
+}
+
+.kalender .dage .event {
+  position: relative;
+}
+
+.kalender .dage .event::after {
+  content: '';
+  position: absolute;
+  bottom: 10%;
+  left: 50%;
+  width: 75%;
+  height: 6px;
+  border-radius: 30px;
+  transform: translate(-50%);
+  background-color: #022c12;
+}
+.kalender .active.event {
+  padding-bottom: 10px;
+}
+
+.kalender .goto-idag {
+  width: 100%;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 5px;
+  padding: 0 20px;
+  margin-bottom: 20px;
+  color: #d1bee7;
+}
+
+.kalender .goto-idag .goto {
+  display: flex;
+  align-items: center;
+  border-radius: 5px;
+  overflow: hidden;
+  border: 1px solid #d1bee7; 
+}
+
+.kalender .goto-idag .goto input {
+  width: 100%;
+  height: 30px;
+  outline: none;
+  border: none;
+  border-radius: 5px;
+  padding: 0 20px;
+  color: #022c12;
+  border-radius: 5px;
+}
+.kalender .goto-idag button {
+  padding: 10px 10px;
+  border: 1px solid #d1bee7;
+  border-radius: 5px;
+  background-color: #d1bee7;
+  cursor: pointer;
+  color: white;
+}
+.kalender .goto-idag button:hover {
+  color: white;
+  background-color: #022c12;
+}
+.kalender .goto-idag .goto button {
+  border: none;
+  border-left: 1px solid #d1bee7;
+  border-radius: 2px;
+}
