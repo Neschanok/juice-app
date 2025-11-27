@@ -8,18 +8,21 @@
     <script src="https://kit.fontawesome.com/bd587e2beb.js" crossorigin="anonymous"></script>
 </head>
 <body class="salg">
+<button class="menu-toggle" id="menuToggle">
+  <i class="fa-solid fa-bars"></i>
+</button>
 <div class="container">
     
     <section class="menu">
         <header class="overskrift-logo">
-            <img src="C:\Users\Bruger\Desktop\5. semester\DIS\disProject\juice-app\public\billeder\understorylogo.png" alt="Logo for Understory">
+            <img src="C:\Users\Bruger\Desktop\5. semester\DIS\disProject\jui...p\public\billeder\understorylogo.png" alt="Logo for Understory">
         </header>
         <nav>
             <ul>
-                <li><i class="fa-regular fa-house"></i> Home</li>
-                <li><a href="calender.html" target="_blank"><i class="fa-regular fa-calendar"></i>&nbsp;Kalender</a></li>
-                <li><a href="oplevelser.html" target="_blank"><i class="fa-solid fa-ticket"></i> Oplevelser</a></li>
-                <li><a href="sales.html" target="_blank"><i class="fa-solid fa-receipt"></i> Salg</a></li>
+                <li><a href="home.html"><i class="fa-regular fa-house"></i> Home</a></li>
+                <li><a href="calender.html"><i class="fa-regular fa-calendar"></i> Kalender</a></li>
+                <li><a href="oplevelser.html"><i class="fa-solid fa-ticket"></i> Oplevelser</a></li>
+                <li><a href="sales.html"><i class="fa-solid fa-receipt"></i> Salg</a></li>
                 <li><i class="fa-solid fa-store"></i> Hjemmeside</li>
                 <li><i class="fa-solid fa-chart-line"></i> Udvikling</li>
             </ul>
@@ -30,13 +33,11 @@
         <h2>Oplevelser</h2>
     </div>
 
-        <div class="tab">
-            <button class="tablinks" onclick="openOplevelser(event, 'Live')">LIVE</button>
-            <button class="tablinks" onclick="openOplevelser(event, 'Arkiveret')">ARKIVERET</button>
-
+    <div class="tab">
+        <button class="tablinks" onclick="openOplevelser(event, 'Live')">LIVE</button>
+        <button class="tablinks" onclick="openOplevelser(event, 'Arkiveret')">ARKIVERET</button>
 
         <div id="Live" class="tabcontent">
-            
             <div class="oplevelse-item">
                 <a target="_blank" href="billeder\kayaktour.jpg">
                     <img src="billeder\kayaktour.jpg" alt="Kayak Tour" width="300" height="200">
@@ -59,18 +60,66 @@
             </div>
 
             <div class="oplevelse-item">
-                <a target="_blank" href="billeder\Sailing class.jpg">
-                    <img src="billeder\Sailing class.jpg" alt="Sailing Class" width="300" height="200">
+                <a target="_blank" href="billeder\treetop.jpg">
+                    <img src="billeder\treetop.jpg" alt="Treetop Adventure" width="300" height="200">
                 </a>
-                <div class="oplevelse">Sailing Class</div>
+                <div class="oplevelse">Treetop Adventure</div>
             </div>
 
             <div class="oplevelse-item">
-                <a target="_blank" href="billeder\Windsurfing.jpg">
-                    <img src="billeder\Windsurfing.jpg" alt="Windsurfing" width="300" height="200">
+                <a target="_blank" href="billeder\Mountainbike.jpeg">
+                    <img src="billeder\Mountainbike.jpeg" alt="Mountainbike" width="300" height="200">
                 </a>
-                <div class="oplevelse">Windsurfing</div>
+                <div class="oplevelse">Mountainbike</div>
+            </div>
 
+            <div class="oplevelse-item">
+                <a target="_blank" href="billeder\CampingTrip.jpeg">
+                    <img src="billeder\CampingTrip.jpeg" alt="Camping Trip" width="300" height="200">
+                </a>
+                <div class="oplevelse">Camping Trip</div>
+            </div>
+
+            <div class="oplevelse-item">
+                <a target="_blank" href="billeder\SUP.jpg">
+                    <img src="billeder\SUP.jpg" alt="SUP" width="300" height="200">
+                </a>
+                <div class="oplevelse">SUP</div>
+            </div>
+
+            <div class="oplevelse-item">
+                <a target="_blank" href="billeder\Climbing.jpg">
+                    <img src="billeder\Climbing.jpg" alt="Climbing" width="300" height="200">
+                </a>
+                <div class="oplevelse">Climbing</div>
+            </div>
+
+            <div class="oplevelse-item">
+                <a target="_blank" href="billeder\TrailRun.jpeg">
+                    <img src="billeder\TrailRun.jpeg" alt="Trail Run" width="300" height="200">
+                </a>
+                <div class="oplevelse">Trail Run</div>
+            </div>
+
+            <div class="oplevelse-item">
+                <a target="_blank" href="billeder\OutdoorYoga.jpeg">
+                    <img src="billeder\OutdoorYoga.jpeg" alt="Outdoor Yoga" width="300" height="200">
+                </a>
+                <div class="oplevelse">Outdoor Yoga</div>
+            </div>
+
+            <div class="oplevelse-item">
+                <a target="_blank" href="billeder\KayakCamping.jpeg">
+                    <img src="billeder\KayakCamping.jpeg" alt="Kayak Camping" width="300" height="200">
+                </a>
+                <div class="oplevelse">Kayak Camping</div>
+            </div>
+
+            <div class="oplevelse-item">
+                <a target="_blank" href="billeder\NightHike.jpeg">
+                    <img src="billeder\NightHike.jpeg" alt="Night Hike" width="300" height="200">
+                </a>
+                <div class="oplevelse">Night Hike</div>
             </div>
         </div>
     
@@ -88,32 +137,39 @@
                 </a>
                 <div class="oplevelse">River Rafting</div>
             </div>
-
         </div>
 
         <script>
-            window.onload = function() {
-                document.querySelector(".tablinks").click();
-            }
-
             function openOplevelser(evt, valgAfOplevelse) {
-            var i, tabcontent, tablinks;
+                var i, tabcontent, tablinks;
 
-            tabcontent = document.getElementsByClassName("tabcontent");
-            for (i=0; i < tabcontent.length; i++) {
-                tabcontent[i].style.display = "none";
-            }
+                tabcontent = document.getElementsByClassName("tabcontent");
+                for (i = 0; i < tabcontent.length; i++) {
+                    tabcontent[i].style.display = "none";
+                }
 
-            tablinks = document.getElementsByClassName("tablinks");
-            for (i = 0; i < tablinks.length; i++) {
-                tablinks[i].classList.remove("active");
-            }
+                tablinks = document.getElementsByClassName("tablinks");
+                for (i = 0; i < tablinks.length; i++) {
+                    tablinks[i].classList.remove("active");
+                }
 
-            document.getElementById(valgAfOplevelse).style.display = "block";
-            evt.currentTarget.classList.add("active");
+                document.getElementById(valgAfOplevelse).style.display = "block";
+                evt.currentTarget.classList.add("active");
             }
         </script>
-        </div>
     </div>
+</div>
+<script>
+    const menu = document.querySelector('.menu');
+    const toggle = document.getElementById('menuToggle');
+    if (menu && toggle) {
+      toggle.addEventListener('click', () => {
+        menu.classList.toggle('collapsed');
+        document.body.classList.toggle('menu-collapsed');
+      });
+    }
+</script>
+
+
 </body>
 </html>

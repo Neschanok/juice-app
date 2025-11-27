@@ -1,735 +1,744 @@
-/* ---------- UNDERSTORY THEME ---------- */
-:root {
-  --bg: #ffffff;
-  --text: #0b0b0c;
-  --muted: #6b7280;
-  --border: #e5e7eb;
-  --card: #f8f9fa;
-  --accent: #e5ff5f;  /* frisk limegrøn */
-  --accent-text: #111;
-  --radius: 14px;
-  --shadow-sm: 0 1px 2px rgba(0,0,0,0.08);
-  --shadow-md: 0 6px 20px rgba(0,0,0,0.08);
-  --focus: 0 0 0 3px rgba(229,255,95,0.5);
-}
+/* =========================================
+   GLOBAL THEME – UNDERSTORY DARK
+========================================= */
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --bg: #0a0a0b;
-    --text: #f3f3f4;
-    --muted: #9ca3af;
-    --border: #27272a;
-    --card: #141415;
-    --accent: #eaff6a;
-    --accent-text: #0b0b0c;
-  }
-}
-
-/* ---------- BASE ---------- */
-* { box-sizing: border-box; }
-html, body {
-  height: 100%;
+* {
   margin: 0;
-  font-family: 'Inter', system-ui, sans-serif;
-  background: var(--bg);
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+:root {
+  --accent: #e5ff5f;
+  --accent-text: #111827;
+  --sidebar-width: 260px;
+
+  --bg: #05060a;
+  --card: #0b0c10;
+  --text: #f9fafb;
+  --muted: #9ca3af;
+  --border: #1f2937;
+}
+
+html,
+body {
+  min-height: 100%;
+}
+
+body {
+  background:
+    radial-gradient(circle at 60% 0%, rgba(229, 255, 95, 0.1), transparent 65%),
+    var(--bg);
   color: var(--text);
 }
 
-body.joe-bg {
-  background:
-    radial-gradient(900px at 80% -20%, rgba(229,255,95,0.18), transparent 60%),
-    radial-gradient(700px at 0% 100%, rgba(229,255,95,0.12), transparent 60%),
-    var(--bg);
+/* så links ikke bliver lilla */
+a,
+a:visited {
+  color: inherit;
+  text-decoration: none;
 }
 
-/* ---------- LAYOUT ---------- */
+/* generel knap-style */
+button {
+  font-family: inherit;
+}
+
+/* =========================================
+   SIDEBAR + LAYOUT
+========================================= */
+
+/* layout for sider med menu (home, kalender, salg, oplevelser) */
+.home-layout,
+.container {
+  min-height: 100vh;
+  padding: 24px 24px 24px calc(var(--sidebar-width) + 56px);
+}
+
+/* fast sidebar */
+.menu {
+  position: fixed;
+  top: 24px;
+  left: 24px;
+  width: var(--sidebar-width);
+  height: calc(100vh - 48px);
+  background: var(--card);
+  border-radius: 28px;
+  border: 1px solid var(--border);
+  padding: 22px 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: 24px;
+  box-shadow: 0 22px 55px rgba(0, 0, 0, 0.6);
+  z-index: 1000;
+  transition: transform 0.25s ease;
+}
+
+/* når den er skjult */
+.menu.collapsed {
+  transform: translateX(calc(-1 * (var(--sidebar-width) + 40px)));
+}
+
+/* burger-knap */
+.menu-toggle {
+  position: fixed;
+  top: 26px;
+  left: 26px;
+  width: 44px;
+  height: 44px;
+  border-radius: 999px;
+  border: none;
+  background: #111827;
+  color: var(--accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 1100;
+  font-size: 18px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+}
+
+/* når menuen er kollapset skal indholdet tættere på venstre */
+body.menu-collapsed .home-layout,
+body.menu-collapsed .container {
+  padding-left: 76px;
+}
+
+/* logo-overskrifter */
+.overskrift h2 {
+  font-size: 20px;
+  letter-spacing: -0.03em;
+}
+
+.overskrift-logo img {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  object-fit: contain;
+  background: #020617;
+  padding: 6px;
+}
+
+/* nav med ul/li (salg/kalender/oplevelser) */
+.menu nav ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.menu nav ul li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px;
+  border-radius: 12px;
+  font-size: 14px;
+  color: var(--muted);
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease, transform 0.1s ease;
+}
+
+.menu nav ul li:hover {
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text);
+  transform: translateX(2px);
+}
+
+.menu nav ul li a {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: inherit;
+}
+
+.menu nav ul li i {
+  width: 18px;
+  text-align: center;
+}
+
+/* nav-variant på home.html (.menu-links h3) */
+.menu-links h3 {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px;
+  border-radius: 12px;
+  font-size: 14px;
+  color: var(--muted);
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease, transform 0.1s ease;
+}
+
+.menu-links h3 i {
+  width: 18px;
+  text-align: center;
+}
+
+.menu-links h3:hover {
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text);
+  transform: translateX(2px);
+}
+
+/* logout-knap kan skubbes i bund */
+.logout-btn {
+  margin-top: auto;
+}
+
+/* =========================================
+   HOME PAGE
+========================================= */
+
+.home-content {
+  background: var(--card);
+  border-radius: 26px;
+  border: 1px solid var(--border);
+  padding: 30px;
+  box-shadow: 0 22px 55px rgba(0, 0, 0, 0.6);
+}
+
+.home-content h1 {
+  font-size: 32px;
+  margin-bottom: 10px;
+}
+
+.home-content p {
+  color: var(--muted);
+  font-size: 14px;
+}
+
+/* =========================================
+   SALG PAGE
+========================================= */
+
+.indholdoverskrift h2 {
+  font-size: 28px;
+  margin: 12px 0 18px;
+}
+
+.indhold {
+  background: var(--card);
+  border-radius: 24px;
+  border: 1px solid var(--border);
+  padding: 24px;
+  box-shadow: 0 18px 45px rgba(0, 0, 0, 0.5);
+}
+
+.salg-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 26px;
+}
+
+.tekst-salg {
+  flex: 1 260px;
+}
+
+.salg_graf {
+  flex: 1 260px;
+}
+
+.salg_graf img {
+  width: 100%;
+  border-radius: 18px;
+  border: 1px solid var(--border);
+}
+
+.salg-tal {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.beløb {
+  font-size: 40px;
+  font-weight: 800;
+}
+
+.periode {
+  color: var(--muted);
+  margin-top: 4px;
+}
+
+.salg-detaljer ul {
+  list-style: none;
+  margin-top: 14px;
+}
+
+.salg-detaljer li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 4px 0;
+  color: var(--muted);
+}
+
+/* =========================================
+   OPLEVELSER PAGE
+========================================= */
+
+/* overskrift er genbrugt via .indholdoverskrift */
+
+.container .tab {
+  background: var(--card);
+  border-radius: 24px;
+  border: 1px solid var(--border);
+  padding: 18px 18px 20px;
+  margin-top: 4px;
+  box-shadow: 0 18px 45px rgba(0, 0, 0, 0.5);
+}
+
+/* tab-knapper (LIVE/ARKIVERET) – oplevelser */
+.container .tab button.tablinks {
+  background: #111827;
+  color: var(--muted);
+  border: none;
+  padding: 8px 16px;
+  border-radius: 999px;
+  margin-right: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease, transform 0.1s ease;
+}
+
+.container .tab button.tablinks:hover {
+  background: #020617;
+  color: var(--text);
+}
+
+.container .tab button.tablinks.active {
+  background: var(--accent);
+  color: var(--accent-text);
+  transform: translateY(-1px);
+}
+
+/* indhold under tabs */
+.tabcontent {
+  display: none;
+  margin-top: 18px;
+  padding-top: 12px;
+  border-top: 1px solid var(--border);
+}
+
+/* oplevelseskort */
+.oplevelse-item {
+  display: flex;
+  gap: 18px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.oplevelse-item img {
+  width: 240px;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 14px;
+  border: 1px solid var(--border);
+}
+
+.oplevelse {
+  font-weight: 600;
+  margin-top: 4px;
+}
+
+/* =========================================
+   KALENDER PAGE
+========================================= */
+
+.kalender-container {
+  background: transparent;
+  border-radius: 24px;
+  padding: 0 0 20px;
+}
+
+.kalender {
+  background: #020617;
+  border-radius: 26px;
+  border: 1px solid #111827;
+  padding-bottom: 16px;
+  box-shadow: 0 18px 45px rgba(0, 0, 0, 0.8);
+}
+
+/* top: måned/nav */
+.måned {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 22px;
+  border-bottom: 1px solid #111827;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.måned .fa {
+  cursor: pointer;
+  padding: 6px;
+  border-radius: 999px;
+  color: var(--muted);
+  transition: background 0.15s ease, color 0.15s ease, transform 0.1s ease;
+}
+
+.måned .fa:hover {
+  background: rgba(229, 255, 95, 0.08);
+  color: var(--accent);
+  transform: translateY(-1px);
+}
+
+/* ugedage */
+.ugedage {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  padding: 12px 18px 6px;
+  text-transform: uppercase;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+}
+
+/* dage */
+.dage {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 6px;
+  padding: 8px 14px 12px;
+  font-size: 13px;
+}
+
+.dag {
+  position: relative;
+  height: 68px;
+  padding: 8px 8px;
+  border-radius: 12px;
+  cursor: pointer;
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-end;
+  transition: background 0.15s ease, transform 0.1s ease;
+}
+
+.dag:hover {
+  background: rgba(15, 23, 42, 0.9);
+  transform: translateY(-1px);
+}
+
+.prev-date,
+.next-date {
+  color: #4b5563;
+}
+
+.today {
+  border: 1px solid var(--accent);
+  box-shadow: 0 0 0 1px rgba(229, 255, 95, 0.4);
+}
+
+/* lille event-prik */
+.event::after {
+  content: "";
+  position: absolute;
+  bottom: 6px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: var(--accent);
+}
+
+/* goto/idag nederst */
+.goto-idag {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 4px 18px 0;
+  gap: 10px;
+}
+
+.goto-idag .goto {
+  display: flex;
+  border-radius: 999px;
+  overflow: hidden;
+  border: 1px solid #111827;
+}
+
+.goto-idag .goto input {
+  background: transparent;
+  border: none;
+  padding: 6px 10px;
+  font-size: 12px;
+  color: var(--text);
+}
+
+.goto-idag .goto input::placeholder {
+  color: var(--muted);
+}
+
+.goto-idag .goto button,
+.goto-idag .idag-btn {
+  border: none;
+  padding: 6px 12px;
+  font-size: 12px;
+  font-weight: 600;
+  border-radius: 999px;
+  cursor: pointer;
+  background: var(--accent);
+  color: var(--accent-text);
+  transition: background 0.15s ease, transform 0.1s ease, box-shadow 0.15s ease;
+}
+
+.goto-idag .goto button:hover,
+.goto-idag .idag-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.4);
+}
+
+/* =========================================
+   LOGIN PAGE (index.html)
+========================================= */
+
+body.joe-bg {
+  background:
+    radial-gradient(circle at 20% 0%, rgba(229, 255, 95, 0.08), transparent 55%),
+    var(--bg);
+  color: var(--text);
+}
+
+/* wrapper med branding + kort */
 .auth-wrap {
-  max-width: 950px;
-  margin: 5vh auto;
+  max-width: 960px;
+  margin: 8vh auto;
   padding: 0 24px;
   display: grid;
   grid-template-columns: 1.1fr 1fr;
-  align-items: center;
   gap: 40px;
+  align-items: center;
 }
-@media (max-width: 800px) {
+
+@media (max-width: 840px) {
   .auth-wrap {
     grid-template-columns: 1fr;
     text-align: center;
   }
 }
 
-/* ---------- BRAND ---------- */
+/* logo/brand venstre side */
 .brand {
   display: flex;
   flex-direction: column;
   gap: 18px;
 }
+
 .brand-circle {
-  width: 70px;
-  height: 70px;
+  width: 74px;
+  height: 74px;
   border-radius: 50%;
   background: var(--accent);
   color: var(--accent-text);
   display: grid;
   place-items: center;
   font-weight: 800;
-  font-size: 1.8rem;
-  box-shadow: var(--shadow-sm);
-}
-.brand h1 {
-  margin: 0;
-  font-weight: 800;
-  font-size: clamp(2rem, 4vw, 2.5rem);
-}
-.brand-sub {
-  margin: 0;
-  color: var(--muted);
+  font-size: 1.9rem;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.75);
 }
 
-/* ---------- CARD (Login/Signup) ---------- */
+.brand h1 {
+  font-size: clamp(2.2rem, 4vw, 2.7rem);
+  letter-spacing: -0.03em;
+}
+
+/* kort med login/signup */
 .auth-card {
   background: var(--card);
+  border-radius: 22px;
   border: 1px solid var(--border);
-  border-radius: var(--radius);
-  box-shadow: var(--shadow-md);
-  padding: 28px;
+  padding: 24px 22px 20px;
+  box-shadow: 0 22px 55px rgba(0, 0, 0, 0.75);
 }
+
+/* tabs øverst (login / signup) */
 .tabs {
   display: flex;
   gap: 8px;
+  padding: 4px;
+  border-radius: 999px;
+  background: #020617;
   margin-bottom: 18px;
 }
-.tab {
+
+.tabs .tab {
   flex: 1;
-  padding: 10px 14px;
-  font-weight: 600;
-  border: 1px solid var(--border);
+  padding: 8px 14px;
   border-radius: 999px;
+  border: none;
   background: transparent;
-  color: var(--text);
-  cursor: pointer;
-  transition: background .2s, border-color .2s;
-}
-.tab.active {
-  background: var(--accent);
-  border-color: var(--accent);
-  color: var(--accent-text);
-}
-
-/* ---------- FORMS ---------- */
-.form {
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-}
-.hidden { display: none; }
-
-.input_box {
-  display: grid;
-  grid-template-columns: 24px 1fr 24px;
-  align-items: center;
-  gap: 10px;
-  padding: 12px 14px;
-  border-radius: 10px;
-  border: 1px solid var(--border);
-  background: var(--bg);
-}
-.input_box input {
-  border: none;
-  outline: none;
-  background: transparent;
-  color: var(--text);
-  font-size: 15px;
-}
-.input_box input::placeholder {
   color: var(--muted);
-}
-.input_box i {
-  color: var(--muted);
-}
-.toggle-pass {
-  cursor: pointer;
-}
-
-/* Options (remember + link) */
-.options {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+  font-weight: 600;
   font-size: 14px;
-  color: var(--muted);
-}
-.options a {
-  color: var(--text);
-  text-decoration: none;
-  border-bottom: 1px solid transparent;
-}
-.options a:hover {
-  border-bottom-color: currentColor;
-}
-
-/* Buttons */
-.btn {
-  border: none;
   cursor: pointer;
-  padding: 12px 16px;
-  border-radius: 10px;
-  font-weight: 700;
-  letter-spacing: -0.01em;
-  transition: all 0.15s ease;
+  transition: background 0.18s ease, color 0.18s ease, transform 0.08s ease;
 }
-.btn:active {
-  transform: translateY(1px);
-}
-.btn.primary {
-  background: var(--text);
-  color: #fff;
-}
-.btn.secondary {
+
+.tabs .tab.active {
   background: var(--accent);
   color: var(--accent-text);
-}
-.btn:hover {
-  box-shadow: var(--shadow-sm);
-}
-
-/* Messages */
-.message {
-  min-height: 20px;
-  font-size: 14px;
-  padding-top: 4px;
-}
-.message.success {
-  color: #0f9960;
-}
-.message.error {
-  color: #d93025;
-}
-
-/* Footer note */
-.footnote {
-  margin-top: 12px;
-  text-align: left;
-  color: var(--muted);
-  font-size: 12px;
-}
-
-/* Focus outline */
-input:focus-visible,
-button:focus-visible,
-a:focus-visible {
-  outline: none;
-  box-shadow: var(--focus);
-}
-
-/* Disabled button */
-.btn[disabled] {
-  opacity: .7;
-  cursor: not-allowed;
-}
-
-/* ---------- HOME PAGE ---------- */
-.navbar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 14px 20px;
-  border-bottom: 1px solid var(--border);
-  background: var(--card);
-  box-shadow: var(--shadow-sm);
-}
-.nav-left {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-.nav-title {
-  font-weight: 700;
-  font-size: 18px;
-}
-.brand-circle.small {
-  width: 36px;
-  height: 36px;
-  font-size: 18px;
-}
-.home-content {
-  text-align: center;
-  margin-top: 80px;
-  padding: 0 20px;
-}
-.home-content h1 {
-  font-size: 2rem;
-  margin-bottom: 10px;
-}
-.home-content p {
-  color: var(--muted);
-}
-
-.btn.primary {
-  background: var(--accent);
-  color: var(--accent-text);
-  border: none;
-}
-.btn.primary:hover {
-  box-shadow: var(--shadow-md);
   transform: translateY(-1px);
 }
 
-/* ---------- HOME PAGE LAYOUT MED MENU ---------- */
-.home-layout {
-  display: grid;
-  grid-template-columns: 250px 1fr;
-  min-height: 100vh;
-}
-
-.menu {
-  background: var(--card);
-  border-right: 1px solid var(--border);
-  padding: 24px 20px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-}
-
-.overskrift h2 {
-  margin: 0 0 20px;
-  font-size: 1.5rem;
-  font-weight: 800;
-}
-
-.menu-links {
+/* login/signup forms */
+.form {
   display: flex;
   flex-direction: column;
   gap: 12px;
 }
 
-.menu-links h3 {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  font-size: 16px;
-  font-weight: 600;
-  color: var(--text);
-  cursor: pointer;
-  padding: 10px 12px;
-  border-radius: 10px;
-  transition: background 0.2s ease, color 0.2s ease;
+.hidden {
+  display: none;
 }
 
-.menu-links h3:hover {
+/* input-bokse */
+.input_box {
+  display: grid;
+  grid-template-columns: 24px 1fr 24px;
+  align-items: center;
+  gap: 10px;
+  padding: 11px 12px;
+  border-radius: 12px;
+  background: #020617;
+  border: 1px solid #1f2937;
+}
+
+.input_box input {
+  border: none;
+  outline: none;
+  background: transparent;
+  color: var(--text);
+  font-size: 14px;
+}
+
+.input_box input::placeholder {
+  color: var(--muted);
+}
+
+.input_box i {
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.toggle-pass {
+  cursor: pointer;
+}
+
+/* "husk mig" + "glemt kode" */
+.options {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 13px;
+  color: var(--muted);
+  margin-top: 2px;
+}
+
+.options label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+}
+
+/* knapper */
+.btn {
+  border: none;
+  cursor: pointer;
+  padding: 11px 16px;
+  border-radius: 12px;
+  font-weight: 700;
+  font-size: 14px;
+  letter-spacing: -0.01em;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: transform 0.1s ease, box-shadow 0.15s ease, background 0.15s ease;
+}
+
+.btn.primary {
   background: var(--accent);
   color: var(--accent-text);
 }
 
-.logout-btn {
-  margin-top: 40px;
-  width: 100%;
-  justify-content: center;
+.btn.secondary {
+  background: #111827;
+  color: var(--text);
+  border: 1px solid #1f2937;
 }
 
-/* Hovedindhold */
-.home-content {
-  padding: 40px 60px;
+.btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.5);
 }
-.home-content h1 {
-  font-size: 2rem;
-  margin-bottom: 10px;
+
+.btn:active {
+  transform: translateY(0);
+  box-shadow: none;
 }
-.home-content p {
+
+.btn[disabled] {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+/* feedback-tekster */
+.message {
+  min-height: 18px;
+  font-size: 13px;
+  margin-top: 4px;
+}
+
+.message.success {
+  color: #4ade80;
+}
+
+.message.error {
+  color: #fb7185;
+}
+
+.footnote {
+  margin-top: 12px;
+  font-size: 12px;
   color: var(--muted);
 }
 
-/*Salg styling*/
-.container {
-  display: grid;
-  grid-template-columns: 300px 1fr;
-  grid-template-rows: auto 1fr;
-  height: 100vh;
-  background-color: #022c12;
-}
+/* =========================================
+   RESPONSIVE
+========================================= */
 
-.overskrift-logo {
-  margin-bottom: 10px;
-  display: flex;
-  width: 60px;
-  height: 60px;
-  margin-bottom: 30px;
-}
+@media (max-width: 900px) {
+  :root {
+    --sidebar-width: 220px;
+  }
 
-.menu {
-  display: block;
-  grid-column: 1 / 2;
-  grid-row: 1 / 3;
-  justify-items: left;
-  padding: 20px;
-  border-radius: 25px;
-  background-color:#ffffff;
-  margin: 20px;
-  font-weight: bold;
+  .home-layout,
+  .container {
+    padding: 20px 14px 20px calc(var(--sidebar-width) + 40px);
+  }
 
-}
+  body.menu-collapsed .home-layout,
+  body.menu-collapsed .container {
+    padding-left: 64px;
+  }
 
-.menu li {
-  margin-bottom: 30px;
-  list-style: none;
-  margin-left: -40px;
-}
-.menu li a:hover:not(.active) {
-  background-color: #f1f7eb;
-}
+  .salg-container {
+    flex-direction: column;
+  }
 
-.menu a {
-  text-decoration: none;
-  color: inherit; 
-  font-weight: bold;
-  display: flex;
-  width: 200px;
-  height: 40px;
-  border-radius: 10px;
-  align-items: center;
-  padding: 5px;
-  color: #234923;
-}
-
-.indholdoverskrift {
-  grid-column: 2 / 3;
-  grid-row: 1 / 2;
-  color: #f1f97e;
-  padding-left: 30px;
-  font-size: 35px;
-}
-
-.salg-container {
-  display: flex;
-  gap: 20px;
-  flex: 2;
-  width: 100%;
-  flex-wrap: wrap;
-  box-sizing: border-box;
-}
-
-.indhold {
-  width: fit-content;
-  height: fit-content;
-  background-color: #ffffff;
-  padding-left: 30px;
-  border-radius: 25px;
-  margin: 30px;
-  margin-top: 0px;
-  color: #380c0f;
-}
-
-.salg_graf {
-  flex: 3 300px;
-  padding: 20px;
-}
-
-.salg_graf img {
-  width: 100%;
-  height: auto;
-  display: block;
-}
-
-.salg-tal {
-  display: flex;
-  align-items: baseline;
-  gap: 5px;
-}
-
-.salg-detaljer {
-  font-size: 14px;
-  padding: 5px;
-  margin-top: 10px;
-}
-
-.beløb {
-  font-size: 50px;
-  font-weight: 500;
-}
-
-.salg-detaljer ul {
-  margin-top: 100px;
-  padding-left: 0px;
-}
-
-.periode {
-  font-size: 14px;
-  margin-top: -50px;
-  padding-left: 5px;
-}
-
-.salg-detaljer li {
-  list-style: none;
-  padding-bottom: 20px;
-}
-
-/*Oplevelse styling*/
-.tab {
-  overflow: auto;
-  border: 1px solid #ccc;
-  background-color: #f1f1f1; 
-  border-radius: 0;
-
-}
-
-.tab button {
-  background-color: inherit;
-  float: left;
-  border: none;
-  outline: none;
-  cursor: pointer;
-  padding: 14px 16px;
-  transition: 0.3s;
-  color: 022c12;
-  font-weight: bolder;
-  font-size: 19px;
-}
-
-.tab button:hover {
-  background-color: #ddd;
-}
-
-.tab button.active {
-  background-color: #ccc;
-}
-
-.tabcontent {
-  display: none;
-  flex-wrap: wrap;
-  justify-content: flex-start;
-  padding: 6px 12px;
-  border-top: none;
-  margin-top: 60px;
-
-}
-
-div.oplevelse-item {
-  margin: 5px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  padding: 5px;
-  display: flex;
-  align-items: top;
-  gap: 15px;
-  width: 100%;
-}
-
-.oplevelse-item img {
-  width: 300px;
-  height: auto;
-  border-radius: 5px;
-}
-
-
-.oplevelse {
-  font-size: 17px;
-  font-weight: bold;
-  color: #022c12;
-}
-
-div.oplevelse-item:hover {
-  border: 1px solid #777;
-}
-
-div.oplevelse-item div.desc {
-  padding: 15px;
-  text-align: center;
-}
-
-/*Styling til kalender*/
-.kalender-container {
-  position: relative;
-  width: 1000px;
-  min-height: 800px;
-  margin: 0 auto;
-  padding: 5px;
-  color: #022c12;
-  display: flex;
-  border-radius: 10px;
-  background-color: #d1bee7;
-}
-
-.left {
-  width: 100%;
-  padding: 20px;
-}
-
-.kalender {
-  position: relative;
-  width: 95%;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  color: #022c12;
-  border-radius: 6px;
-  background-color: white;
-}
-
-.kalender::before,
-.kalender::after {
-  content: "";
-  position: absolute;
-  top: 50%;
-  left: 100%;
-  width: 12px;
-  height: 98%;
-  border-radius: 0 5px 5px 0;
-  background-color: rgb(240, 236, 236);
-  transform: translateY(-50%);
-}
-
-.kalender::before {
-  height: 94%;
-  left: calc(100% + 12px);
-  background-color: rgb(228, 224, 224);
-}
-
-.kalender .måned {
-  width: 100%;
-  height: 100px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 20px 50px;
-  font-size: 1.2rem;
-  font-weight: 500;
-  text-transform: capitalize;
-}
-
-.kalender .måned .prev:hover,
-.kalender .måned .next:hover {
-  color: #d1bee7;
-}
-
-.kalender .ugedage {
-  width: 100%;
-  height: 100px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 20px;
-  font-size: 1rem;
-  font-weight: 500;
-  text-transform: capitalize; 
-}
-
-.kalender .ugedage div {
-  width: 14.25%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.kalender .dage {
-  width: 100%;
-  display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  gap: 1px;
-  padding: 0 20px;
-  font-size: 1rem;
-  font-weight:500;
-  margin-bottom: 20px;
-}
-.kalender .dage .dag {
-  height: 110px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  color: #380c0f;
-  border: 1px solid #f5f5f5;
-}
-
-.kalender .dag:not(.prev-date):hover {
-  color: white;
-  background-color: #022c12;
-}
-.kalender .dage .prev-date {
-  color: #022c12;
-}
-.kalender .dage .active {
-  position: relative;
-  font-size: 2rem;
-  padding: 15px;
-  color: white;
-  background-color:#d1bee7;
-}
-.kalender .dage .active::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  box-shadow: 0 0 10px 3px #d1bee7;
-}
-
-.kalender .dage .event {
-  position: relative;
-}
-
-.kalender .dage .event::after {
-  content: '';
-  position: absolute;
-  bottom: 10%;
-  left: 50%;
-  width: 75%;
-  height: 6px;
-  border-radius: 30px;
-  transform: translate(-50%);
-  background-color: #022c12;
-}
-.kalender .active.event {
-  padding-bottom: 10px;
-}
-
-.kalender .goto-idag {
-  width: 100%;
-  height: 50px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 5px;
-  padding: 0 20px;
-  margin-bottom: 20px;
-  color: #d1bee7;
-}
-
-.kalender .goto-idag .goto {
-  display: flex;
-  align-items: center;
-  border-radius: 5px;
-  overflow: hidden;
-  border: 1px solid #d1bee7; 
-}
-
-.kalender .goto-idag .goto input {
-  width: 100%;
-  height: 30px;
-  outline: none;
-  border: none;
-  border-radius: 5px;
-  padding: 0 20px;
-  color: #022c12;
-  border-radius: 5px;
-}
-.kalender .goto-idag button {
-  padding: 10px 10px;
-  border: 1px solid #d1bee7;
-  border-radius: 5px;
-  background-color: #d1bee7;
-  cursor: pointer;
-  color: white;
-}
-.kalender .goto-idag button:hover {
-  color: white;
-  background-color: #022c12;
-}
-.kalender .goto-idag .goto button {
-  border: none;
-  border-left: 1px solid #d1bee7;
-  border-radius: 2px;
+  .oplevelse-item {
+    flex-direction: column;
+  }
 }

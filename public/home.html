@@ -10,6 +10,9 @@
 </head>
 
 <body class="salg">
+  <button class="menu-toggle" id="menuToggle">
+    <i class="fa-solid fa-bars"></i>
+  </button>
   <div class="home-layout">
     <section class="menu">
       <header class="overskrift">
@@ -17,10 +20,10 @@
       </header>
 
       <nav class="menu-links">
-        <h3><i class="fa-regular fa-house"></i> Home</h3>
-        <h3><i class="fa-regular fa-calendar"></i> Kalender</h3>
-        <h3><i class="fa-solid fa-ticket"></i> Oplevelser</h3>
-        <h3><i class="fa-solid fa-receipt"></i> Salg</h3>
+        <h3 onclick="location.href='home.html'"><i class="fa-regular fa-house"></i> Home</h3>
+        <h3 onclick="location.href='calender.html'"><i class="fa-regular fa-calendar"></i> Kalender</h3>
+        <h3 onclick="location.href='oplevelser.html'"><i class="fa-solid fa-ticket"></i> Oplevelser</h3>
+        <h3 onclick="location.href='sales.html'"><i class="fa-solid fa-receipt"></i> Salg</h3>
         <h3><i class="fa-solid fa-store"></i> Hjemmeside</h3>
         <h3><i class="fa-solid fa-chart-line"></i> Udvikling</h3>
         <h3><i class="fa-regular fa-comments"></i> Chat</h3>
@@ -37,19 +40,30 @@
     </main>
   </div>
 
+  <script>
+    const menu = document.querySelector('.menu');
+    const toggle = document.getElementById('menuToggle');
+    if (menu && toggle) {
+      toggle.addEventListener('click', () => {
+        menu.classList.toggle('collapsed');
+        document.body.classList.toggle('menu-collapsed');
+      });
+    }
+  </script>
+
   <!-- Firebase logout -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.3.1/firebase-app.js";
     import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.3.1/firebase-auth.js";
 
     const firebaseConfig = {
-   apiKey: "AIzaSyAps2Jve2RE3InZyo_q9MTJ0JtKffDNe1E",
-    authDomain: "understorychat.firebaseapp.com",
-    projectId: "understorychat",
-    storageBucket: "understorychat.firebasestorage.app",
-    messagingSenderId: "1037413097995",
-    appId: "1:1037413097995:web:ddde8b7775db96650e9d0e",
-    measurementId: "G-T4SCFB2SZ5"
+      apiKey: "AIzaSyAps2Jve2RE3InZyo_q9MTJ0JtKffDNe1E",
+      authDomain: "understorychat.firebaseapp.com",
+      projectId: "understorychat",
+      storageBucket: "understorychat.firebasestorage.app",
+      messagingSenderId: "1037413097995",
+      appId: "1:1037413097995:web:ddde8b7775db96650e9d0e",
+      measurementId: "G-T4SCFB2SZ5"
     };
 
     const app = initializeApp(firebaseConfig);
