@@ -1,0 +1,29 @@
+{
+  "name": "juice-app",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "type": "commonjs",
+  "scripts": {
+    "start": "node server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Neschanok/juice-app.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Neschanok/juice-app/issues"
+  },
+  "homepage": "https://github.com/Neschanok/juice-app#readme",
+  "dependencies": {
+    "@twilio/conversations": "^2.6.5",
+    "dotenv": "^17.2.3",
+    "express": "^5.1.0",
+    "firebase-admin": "^13.6.0",
+    "twilio": "^5.10.6"
+  }
+}
