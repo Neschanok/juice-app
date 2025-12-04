@@ -15,7 +15,7 @@
     <div class="container">
         <section class="menu">
             <header class="overskrift-logo">
-                <img src="C:\Users\Bruger\Desktop\5. semester\DIS\disProject\jui...p\public\billeder\understorylogo.png" alt="Logo for Understory">
+                <img src="billeder\understorylogo.png" alt="Logo for Understory">
             </header>
             <nav>
                 <ul>
@@ -57,40 +57,76 @@
                 </div>
             </div>
             <div class="right">
-                <div class="today-date"></div>
-                <div class="event-dag">Tor</div>
-                <div class="event-date">27 November 2025</div>
+                <div class="today-date">
+                    <div class="event-dag">Tor</div>
+                    <div class="event-date">27 November 2025</div>
+                </div>
+                <div class="events"></div>
+                <div class="add-event-wrapper">
+                    <div class="add-event-header">
+                        <div class="title">Tilføj nyt event</div>
+                        <i class="fas fa-times close"></i>
+                    </div>
+                    <div class="add-event-body">
+                        <div class="add-event-input">
+                            <input
+                                type = "text"
+                                placeholder="Titel på event"
+                                class="event-name"
+                            />
+                        </div>
+                        <div class="add-event-input">
+                            <input
+                                type="text"
+                                placeholder="Starttid (hh:mm)"
+                                class="event-time-from"
+                            />
+                        </div>
+                        <div class="add-event-input">
+                            <input
+                                type = "text"
+                                placeholder="Sluttid (hh:mm)"
+                                class="event-time-to"
+                            />
+                        </div>
+                    </div>
+                    <div class="add-event-folder">
+                        <button class="add-event-btn">Opret</button>
+                    </div>
+                </div>
+                <button class="add-event">
+                    <i class="fas fa-plus"></i>
+                </button>
             </div>
         </div>
-    </div>
-    <script src="kalender.js" defer></script>
-    <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.3.1/firebase-app.js";
-    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.3.1/firebase-auth.js";
+        <script src="kalender.js" defer></script>
+        <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.3.1/firebase-app.js";
+        import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.3.1/firebase-auth.js";
 
-    const firebaseConfig = {
-   apiKey: "AIzaSyAps2Jve2RE3InZyo_q9MTJ0JtKffDNe1E",
-    authDomain: "understorychat.firebaseapp.com",
-    projectId: "understorychat",
-    storageBucket: "understorychat.firebasestorage.app",
-    messagingSenderId: "1037413097995",
-    appId: "1:1037413097995:web:ddde8b7775db96650e9d0e",
-    measurementId: "G-T4SCFB2SZ5"
-    };
+        const firebaseConfig = {
+    apiKey: "AIzaSyAps2Jve2RE3InZyo_q9MTJ0JtKffDNe1E",
+        authDomain: "understorychat.firebaseapp.com",
+        projectId: "understorychat",
+        storageBucket: "understorychat.firebasestorage.app",
+        messagingSenderId: "1037413097995",
+        appId: "1:1037413097995:web:ddde8b7775db96650e9d0e",
+        measurementId: "G-T4SCFB2SZ5"
+        };
 
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
 
-    // Hvis ikke logget ind → tilbage til index.html
-    onAuthStateChanged(auth, (user) => {
-      if (!user) window.location.href = "./index.html";
-    });
+        // Hvis ikke logget ind → tilbage til index.html
+        onAuthStateChanged(auth, (user) => {
+        if (!user) window.location.href = "./index.html";
+        });
 
-    // Log ud
-    document.getElementById("logoutBtn").addEventListener("click", async () => {
-      await signOut(auth);
-      window.location.href = "./index.html";
-    });
-  </script>
-</body>
+        // Log ud
+        document.getElementById("logoutBtn").addEventListener("click", async () => {
+        await signOut(auth);
+        window.location.href = "./index.html";
+        });
+        </script>
+    </body>
 </html>
