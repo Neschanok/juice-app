@@ -97,5 +97,5 @@ app.post("/twilio-token", async (req, res) => {
 
 /* ---------------- START SERVER ---------------- */
 app.listen(PORT, () => {
-  console.log(`Server kører på port ${PORT} – http://localhost:${PORT}/chat.html`);
+  console.log(`Server kører på port ${PORT} – http://localhost:${PORT}`);
 });
