@@ -1061,3 +1061,127 @@ body.joe-bg {
     flex-direction: column;
   }
 }
+
+
+/* ================================
+   UNDERSTORY – CHAT STYLE
+================================ */
+
+.chat-wrapper {
+  background: #020617;
+  border-radius: 24px;
+  border: 1px solid #111827;
+  padding: 18px 18px 16px;
+  box-shadow: 0 18px 45px rgba(0, 0, 0, 0.7);
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 80px);
+}
+
+.chat-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.chat-header h2 {
+  font-size: 20px;
+  margin: 0;
+}
+
+/* Rollevælger (kunde/vært) */
+.chat-role {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+}
+
+.chat-role select,
+.chat-role button {
+  font-size: 13px;
+  border-radius: 999px;
+  border: 1px solid #111827;
+  padding: 6px 10px;
+  background: #020617;
+  color: var(--muted);
+  cursor: pointer;
+}
+
+.chat-role button {
+  background: var(--accent);
+  color: var(--accent-text);
+  border: none;
+  font-weight: 600;
+}
+
+/* Chat-beskeder */
+.chat-messages {
+  flex: 1;
+  border-radius: 18px;
+  background: #020617;
+  border: 1px solid #111827;
+  padding: 10px;
+  overflow-y: auto;
+  font-size: 14px;
+}
+
+.msg {
+  margin-bottom: 6px;
+}
+
+.msg.me {
+  text-align: right;
+}
+
+.msg .author {
+  opacity: 0.7;
+  font-size: 11px;
+  margin-bottom: 2px;
+}
+
+.msg .body {
+  display: inline-block;
+  margin-top: 2px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: #111827;
+}
+
+.msg.me .body {
+  background: var(--accent);
+  color: var(--accent-text);
+}
+
+.msg.system .body {
+  background: transparent;
+  color: var(--muted);
+}
+
+/* Input + send-knap */
+.chat-input-row {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.chat-input-row input {
+  flex: 1;
+  padding: 10px;
+  border-radius: 999px;
+  border: 1px solid #111827;
+  background: #020617;
+  color: var(--text);
+  outline: none;
+}
+
+.chat-input-row button {
+  border-radius: 999px;
+  border: none;
+  padding: 10px 16px;
+  font-weight: 600;
+  cursor: pointer;
+  background: var(--accent);
+  color: var(--accent-text);
+}
