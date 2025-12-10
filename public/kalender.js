@@ -16,62 +16,92 @@ document.addEventListener("DOMContentLoaded", function() {
     const ugedage = ["Søndag", "Mandag", "Tirsdag", "Onsdag", "Torsdag", "Fredag", "Lørdag"];
 
 
-let today = new Date();
-let month = today.getMonth();
-let activeDay;
-let year = today.getFullYear();
+    let today = new Date();
+    let month = today.getMonth();
+    let activeDay;
+    let year = today.getFullYear();
 
-const months = [
-    "Januar",
-    "Februar",
-    "Marts",
-    "April",
-    "Maj",
-    "Juni",
-    "Juli",
-    "August",
-    "September",
-    "Oktober",
-    "November",
-    "December",
-];
+    const months = [
+        "Januar",
+        "Februar",
+        "Marts",
+        "April",
+        "Maj",
+        "Juni",
+        "Juli",
+        "August",
+        "September",
+        "Oktober",
+        "November",
+        "December",
+    ];
 
-/*Default events
-const eventsArr = [
-    {
-        day: 16,
-        month: 11,
-        year: 2025,
-        events: [
-            {
-                title: "Event 1 hey jo",
-                time: "10:00AM",
-            },
-            {
-                title: "Event 2",
-                time: "11:00 AM",
-            },
-        ],
-    },
-    {
-        day: 18,
-        month: 11,
-        year: 2025,
-        events: [
-            {
-                title: "Event 1 Bitchy time",
-                time: "10:00AM",
-            },
-        ],
-    },
-];
-*/
+    //initiere et tomt array
+    let eventsArr =[]
+    //Kalder call loadEventsFromDB
+    loadEventsFromDB();
 
-//initiere et tomt array
-let eventsArr =[]
-//Kalder call getEvents
-getEvents();
+    async function loadEventsFromDB() {
+        try {
+            const response = await fetch("http://localhost:6005/events");
+            const events = await response.json();
 
+            eventsArr = [];
+
+            events.forEach(ev => {
+                const { day, month, year } = ev;
+            
+
+            let found = eventsArr.find(e => 
+                e.day === day &&
+                e.month === month &&
+                e.year === year
+            );
+
+            if (!found) { found = {day, month, year, events: []};
+                eventsArr.push(found);
+            }
+
+            found.events.push({
+                title: ev.title,
+                time: ev.start_time + " - " + ev.end_time,
+                id: ev.id
+            });
+        });
+        updateEvents(activeDay);
+        inputKalender();
+        } catch(error) {
+            console.error("Fejl ved hentning af events:", error)
+        }
+    }
+
+    async function addEventToDB(day, month, year, title, start_time, end_time) {
+        try {            
+            await fetch("http://localhost:6005/events", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ 
+                    title: title,
+                    start_time: start_time,
+                    end_time: end_time,
+                    day: day,
+                    month: month,
+                    year: year
+                })
+            });
+            loadEventsFromDB(); //hent opdateret liste
+        } catch(error) {
+            console.error("Kunne ikke gemme event:", error)
+        }
+    }
+
+    async function deleteEventFromDB(id) {
+        try {
+            await fetch(`http://localhost:6005/events/${id}`, { method: "delete" });
+        } catch(error) {
+            console.error("Fejl ved sletning", error);
+        }
+    }
 
 //Funktion til at tilføje dage
 function inputKalender() {
@@ -89,7 +119,6 @@ function inputKalender() {
     
     const firstWeekday = (firstWeekdayR + 6) % 7; 
     const lastWeekday = (lastWeekdayR + 6) % 7; 
-
     const nextDays = 6 - lastWeekday; //antal dage fra næste måned
 
     //updater dato i toppen af kalenderen
@@ -105,7 +134,6 @@ function inputKalender() {
 
     //Nuværende måneds dage
     for (let i = 1; i <= lastDate; i++) {
-
         //check hvis event forgår på nuværende dag
         let event = false;
         eventsArr.forEach((eventObj) => {
@@ -148,7 +176,6 @@ function inputKalender() {
             dage += `<div class="dag next-date">${j}</div>`;
         }
     dageContainer.innerHTML = dage;
-
     //add listner efter kalder er initialiseret
     addListner();
 }
@@ -336,48 +363,57 @@ function getActiveDay(dag) {
     eventDate.innerHTML = `${dayNum} ${months[month]} ${year}`;
 }
 
-function updateEvents(date) {
-    //rydder containeren, så gamle events forsvinder
-    eventsContainer.innerHTML = "";
-    let eventsHTML = "";
+    async function updateEvents(date) {
+        //rydder containeren, så gamle events forsvinder
+        eventsContainer.innerHTML = "";
+        let eventsHTML = "";
 
-    // Alle dage i eventsArr løbes igennem
-    eventsArr.forEach((event) => {
-        if (
-            date === event.day &&
-            month + 1 === event.month &&
-            year === event.year
-        ) {
-            //Alle events for den dag tilføjes
-            event.events.forEach((event, index) => {
-                eventsHTML += `
-                    <div class="event" data-index="${index}">
-                        <div class="title">
-                            <i class="fas fa-circle"></i>
-                            <h3 class="event-title">${event.title}</h3>
-                        </div>
-                    <div class="event-time">
-                        <span class="event-time">${event.time}</span>
-                    </div>          
-                </div>`;
-            });
+        // Alle dage i eventsArr løbes igennem
+        eventsArr.forEach((event) => {
+            if (
+                date === event.day &&
+                month + 1 === event.month &&
+                year === event.year
+            ) {
+                //Alle events for den dag tilføjes
+                event.events.forEach((event, index) => {
+                    eventsHTML += `
+                        <div class="event" data-id="${event.id}" data-index="${index}">
+                            <div class="title">
+                                <i class="fas fa-circle"></i>
+                                <h3 class="event-title">${event.title}</h3>
+                            </div>
+                        <div class="event-time">
+                            <span class="event-time">${event.time}</span>
+                        </div>          
+                    </div>`;
+                });
+            }
+        })
+        //hvis der ikke er fundet nogen events, vises besked med "No Events"
+        if (eventsHTML === "") {
+            eventsHTML = `
+                <div class="no-event">
+                    <h3>Din eventliste er tom <br> Tilføj dine events!</h3>
+                </div>
+            `;
         }
-    })
-    //hvis der ikke er fundet nogen events, vises besked med "No Events"
-    if (eventsHTML === "") {
-        eventsHTML = `
-            <div class="no-event">
-                <h3>Din eventliste er tom <br> Tilføj dine events!</h3>
-            </div>
-        `;
+        eventsContainer.innerHTML = eventsHTML;
+
+        const deleteBtns = document.querySelectorAll(".delete-btn");
+        deleteBtns.forEach(btn => {
+            btn.addEventListener("click", async () => {
+                const id = btn.getAttribute("data-id");
+                if (confirm("Er du sikekr på at slette dette event?")) {
+                    await deleteEventFromDB(id);
+                    await loadEventsFromDB();
+                }
+            });
+        });
     }
-    eventsContainer.innerHTML = eventsHTML;
-    //For at gemme events når update event bliver kaldt
-    saveEvents();
-}
 
 //Funktion til at tilføje events
-addEventSubmit.addEventListener("click", () => {
+addEventSubmit.addEventListener("click", async () => {
     const eventTitle = addEventTitle.value
     const eventTimeFrom = addEventFrom.value;
     const eventTimeTo = addEventTo.value;
@@ -429,6 +465,8 @@ addEventSubmit.addEventListener("click", () => {
         title: eventTitle,
         time: timeFrom + " - " + timeTo,
     };
+
+    await addEventToDB(activeDay, month + 1, year, eventTitle, eventTimeFrom, eventTimeTo);
     console.log(newEvent);
     console.log(activeDay);
     let eventAdded = false;
@@ -467,14 +505,15 @@ addEventSubmit.addEventListener("click", () => {
 });
 
     //Funktion til at slette event når man klikker på event
-    eventsContainer.addEventListener("click", (e) => {
+    eventsContainer.addEventListener("click", async (e) => {
         //For at finde den nærmeste .event boks
         const eventEl = e.target.closest(".event");
         if (!eventEl) return;
+        const id = eventEl.getAttribute("data-id");
 
         //Bekræfter
         if (confirm("Er du sikker på, at du vil dette event?")) {
-            //finder event-titel
+            /*slettes - localstorage - finder event-titel
             const eventTitleEl = eventEl.querySelector(".event-title");
             if (!eventTitleEl) {
                 console.warn("Kan ikke finde event-title inde i boksen");
@@ -504,15 +543,19 @@ addEventSubmit.addEventListener("click", () => {
                 if (activeDayEl) activeDayEl.classList.remove("event");
                 }
             }
-        //Opdater visningen
-        updateEvents(activeDay);
+            */
+            await deleteEventFromDB(id);
+            //Opdater visningen
+            updateEvents(activeDay);
+            showEvents(activeDay, month, year);
         }
     });
 
-    //Funktion der gemmer event i localstorage
-    function saveEvents() {
+    /*slettet (første kode for localStorage) - Funktion der gemmer event i localstorage
+    async function saveEvents() {
         localStorage.setItem("events", JSON.stringify(eventsArr));
     }
+
 
     //Funktion der henter events from localstorage
     function getEvents() {
@@ -522,6 +565,7 @@ addEventSubmit.addEventListener("click", () => {
         }
         eventsArr.push(...JSON.parse(localStorage.getItem("events")));
     }
+    */
 
     function convertTime(time) {
         let timeArr = time.split(":");

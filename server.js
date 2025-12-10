@@ -1,10 +1,12 @@
 // server.js
 // Start serveren med:  npm start
-
 require("dotenv").config();
 
 const path = require("path");
 const express = require("express");
+const cors = require('cors');
+const { getAllEvents, insertEvent, deleteEvent } = require('./database');
+
 const twilio = require("twilio");
 
 const app = express();
@@ -13,6 +15,8 @@ const PORT = process.env.PORT || 5500;
 /* ---------------- EXPRESS SETUP ---------------- */
 app.use(express.json());
 app.use(express.static(path.join(__dirname, "public"))); // dine .html/.css i /public
+app.use(cors());
+
 
 /* ---------------- TWILIO CONFIG ---------------- */
 const accountSid = process.env.TWILIO_ACCOUNT_SID;
@@ -93,6 +97,39 @@ app.post("/twilio-token", async (req, res) => {
       details: err.message,
     });
   }
+});
+
+
+// API routes
+//henter alle events
+app.get('/events', async (req, res) => {
+    try {
+        const rows = await getAllEvents();
+        res.json(rows);
+    } catch (err) {
+        res.status(500).json({error: err.message });
+    }
+});
+
+//opret et nyt event
+app.post('/events', async (req, res) => {
+    const { title, start_time, end_time, day, month, year } = req.body;
+    try {
+        const id = await insertEvent({ title, start_time, end_time, day, month, year });
+        res.json({ id, message: 'Event oprettet!' });
+    } catch (err) {
+        res.status(500).json({ error: err.message }); 
+    }
+});
+
+//slet et event
+app.delete('/events/:id', async (req, res) => {
+    try {
+        await deleteEvent(req.params.id);
+        res.json({ message: 'Event slettet!' });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
 });
 
 /* ---------------- START SERVER ---------------- */
