@@ -167,7 +167,11 @@ function inputKalender() {
         }
         //Tilføje det resterende til kalenderen
         else {
-            dage += `<div class="dag">${i}</div>`;
+            if (event) {
+                dage += `<div class="dag event">${i}</div>`;
+            } else {
+                dage += `<div class="dag">${i}</div>`
+            }
         }
         }
 
@@ -213,6 +217,7 @@ idagBtn.addEventListener("click", () => {
     inputKalender();
 })
 
+
 dateInput.addEventListener("input", (e) => {
     //Tillad kun tal - fjern alt andet
     dateInput.value = dateInput.value.replace(/[^0-9]/g, "");
@@ -230,6 +235,13 @@ dateInput.addEventListener("input", (e) => {
 
 gotoBtn.addEventListener("click", gotoDate);
 
+//Gå til valgt dato via "Enter"
+dateInput.addEventListener("keypress", function(event) {
+    if (event.key === "Enter") {
+        event.preventDefault();
+        gotoBtn.click();
+    }
+})
 //funktion til at få til den indtastede dato
 function gotoDate() {
     const dateArr = dateInput.value.split("/");
@@ -276,7 +288,7 @@ addEventTitle.addEventListener("input", (e) => {
 addEventFrom.addEventListener("input", (e) => {
     addEventFrom.value = addEventFrom.value.replace(/[^0-9:]/g, "");
     //hvis to tal er indtastet tilføj ':' auto
-    if (addEventFrom.value.length === 2) {
+    if (addEventFrom.value.length === 2 && !addEventFrom.value.includes(":")) {
         addEventFrom.value += ":";
     } //max. 5 karakter kan indtastes
     if (addEventFrom.value.length > 5) {
@@ -412,97 +424,119 @@ function getActiveDay(dag) {
         });
     }
 
-//Funktion til at tilføje events
-addEventSubmit.addEventListener("click", async () => {
-    const eventTitle = addEventTitle.value
-    const eventTimeFrom = addEventFrom.value;
-    const eventTimeTo = addEventTo.value;
+    //Funktion til at tilføje events
+    addEventSubmit.addEventListener("click", async () => {
+        const eventTitle = addEventTitle.value
+        const eventTimeFrom = addEventFrom.value;
+        const eventTimeTo = addEventTo.value;
 
-    //Validationer
-    if (eventTitle === "" || eventTimeFrom === "" || eventTimeTo === "") {
-        alert("Please fill all the fields");
-        return;
-    }
+        //Validationer
+        if (eventTitle === "" || eventTimeFrom === "" || eventTimeTo === "") {
+            alert("Please fill all the fields");
+            return;
+        }
 
-    //Tjekker om det er korrekt klokkeslætsformat 24 timer
-    const timeFromArr = eventTimeFrom.split(":");
-    const timeToArr = eventTimeTo.split(":");
+        //Tjekker om det er korrekt klokkeslætsformat 24 timer
+        const timeFromArr = eventTimeFrom.split(":");
+        const timeToArr = eventTimeTo.split(":");
 
-    if (
-        timeFromArr.length !== 2 ||
-        timeToArr.length !== 2 ||
-        timeFromArr[0] > 23 ||
-        timeFromArr[1] >  59 ||
-        timeToArr[0] > 23 ||
-        timeToArr[1] > 59
-    ) {
-        alert ("Invalid Klokkeslæt");
-        return;
-    }
-    const timeFrom = convertTime(eventTimeFrom);
-    const timeTo = convertTime(eventTimeTo);
-
-    //Tjekker om event allerede er tilføjet
-    let eventExist = false;
-    eventsArr.forEach((event) => {
         if (
-            event.day === activeDay &&
-            event.month === month + 1 &&
-            event.year === year
+            timeFromArr.length !== 2 ||
+            timeToArr.length !== 2 ||
+            timeFromArr[0] > 23 ||
+            timeFromArr[1] >  59 ||
+            timeToArr[0] > 23 ||
+            timeToArr[1] > 59
         ) {
-            event.events.forEach((ev) => {
-                if (ev.title === eventTitle) {
-                    eventExist = true;
+            alert ("Invalid Klokkeslæt");
+            return;
+        }
+        const timeFrom = convertTime(eventTimeFrom);
+        const timeTo = convertTime(eventTimeTo);
+
+        //Tjekker om event allerede er tilføjet
+        let eventExist = false;
+        eventsArr.forEach((event) => {
+            if (
+                event.day === activeDay &&
+                event.month === month + 1 &&
+                event.year === year
+            ) {
+                event.events.forEach((ev) => {
+                    if (ev.title === eventTitle) {
+                        eventExist = true;
+                    }
+                });
+            }
+        });
+        if (eventExist) {
+            alert("Event allerede tilføjet");
+            return;
+        }
+        const newEvent = {
+            title: eventTitle,
+            time: timeFrom + " - " + timeTo,
+        };
+
+        await addEventToDB(activeDay, month + 1, year, eventTitle, eventTimeFrom, eventTimeTo);
+        console.log(newEvent);
+        console.log(activeDay);
+        let eventAdded = false;
+        if (eventsArr.length > 0) {
+            eventsArr.forEach((item) => {
+                if (
+                    item.day === activeDay &&
+                    item.month === month + 1 &&
+                    item.year === year
+                ) {
+                    item.events.push(newEvent);
+                    eventAdded = true;
                 }
             });
         }
+        if (!eventAdded) {
+            eventsArr.push({
+                day: activeDay,
+                month: month + 1,
+                year: year,
+                events: [newEvent]
+            });
+        }
+        console.log(eventsArr);
+        addEventContainer.classList.remove("active");
+        addEventTitle.value = "";
+        addEventFrom.value = "";
+        addEventTo.value = "";
+        updateEvents(activeDay);
+
+        //For at vælge aktiv dag og tilføj event class, hvis den ikke er tilføjet
+        const activeDayEl = document.querySelector(".dag.active");
+        if (!activeDayEl.classList.contains("event")) {
+            activeDayEl.classList.add("event");
+        }
     });
-    if (eventExist) {
-        alert("Event allerede tilføjet");
-        return;
-    }
-    const newEvent = {
-        title: eventTitle,
-        time: timeFrom + " - " + timeTo,
-    };
 
-    await addEventToDB(activeDay, month + 1, year, eventTitle, eventTimeFrom, eventTimeTo);
-    console.log(newEvent);
-    console.log(activeDay);
-    let eventAdded = false;
-    if (eventsArr.length > 0) {
-        eventsArr.forEach((item) => {
-            if (
-                item.day === activeDay &&
-                item.month === month + 1 &&
-                item.year === year
-            ) {
-                item.events.push(newEvent);
-                eventAdded = true;
-            }
-        });
-    }
-    if (!eventAdded) {
-        eventsArr.push({
-            day: activeDay,
-            month: month + 1,
-            year: year,
-            events: [newEvent]
-        });
-    }
-    console.log(eventsArr);
-    addEventContainer.classList.remove("active");
-    addEventTitle.value = "";
-    addEventFrom.value = "";
-    addEventTo.value = "";
-    updateEvents(activeDay);
+    //submit event via "Enter" fra title inputfelt
+    addEventTitle.addEventListener("keypress", function(event) {
+        if (event.key === "Enter") {
+            event.preventDefault();
+            addEventSubmit.click();
+        }
+    });
 
-    //For at vælge aktiv dag og tilføj event class, hvis den ikke er tilføjet
-    const activeDayEl = document.querySelector(".dag.active");
-    if (!activeDayEl.classList.contains("event")) {
-        activeDayEl.classList.add("event");
-    }
-});
+    //submit event via "Enter" fra tids inputfelterne
+    addEventFrom.addEventListener("keypress", function(event) {
+        if (event.key === "Enter") {
+            event.preventDefault();
+            addEventSubmit.click();
+        }
+    });
+    addEventTo.addEventListener("keypress", function(event) {
+        if (event.key === "Enter") {
+            event.preventDefault();
+            addEventSubmit.click();
+        }
+    });
 
     //Funktion til at slette event når man klikker på event
     eventsContainer.addEventListener("click", async (e) => {
@@ -513,59 +547,12 @@ addEventSubmit.addEventListener("click", async () => {
 
         //Bekræfter
         if (confirm("Er du sikker på, at du vil dette event?")) {
-            /*slettes - localstorage - finder event-titel
-            const eventTitleEl = eventEl.querySelector(".event-title");
-            if (!eventTitleEl) {
-                console.warn("Kan ikke finde event-title inde i boksen");
-                return;
-            }
-            //henter titlen
-            const eventTitle = eventTitleEl.innerText.trim();
-
-            //finder dag-objektet i eventsArr
-            const dagObj = eventsArr.find(dayObj =>
-                dayObj.day === activeDay &&
-                dayObj.month === month + 1 &&
-                dayObj.year === year                    
-            );
-
-            //finder dagen i eventsArr som matcher activeDay/month/year
-            if (dagObj) {
-            //Event fjernes fra dags-listen
-            dagObj.events = dagObj.events.filter(item => item.title !== eventTitle);
-            //Fjern hele dag-objektet, hvis der ikke er flere events tilbage på dagen
-            if (dagObj.events.length === 0) {
-                const index = eventsArr.indexOf(dagObj);
-                if (index > -1) eventsArr.splice(index, 1);
-
-                            //Sletter event class fra dag
-                const activeDayEl = document.querySelector(".dag.active");
-                if (activeDayEl) activeDayEl.classList.remove("event");
-                }
-            }
-            */
             await deleteEventFromDB(id);
             //Opdater visningen
             updateEvents(activeDay);
             showEvents(activeDay, month, year);
         }
     });
-
-    /*slettet (første kode for localStorage) - Funktion der gemmer event i localstorage
-    async function saveEvents() {
-        localStorage.setItem("events", JSON.stringify(eventsArr));
-    }
-
-
-    //Funktion der henter events from localstorage
-    function getEvents() {
-        //Tjekker om eventet allerede er gemt i localstorage, så return event, ellers ingenting
-        if (localStorage.getItem("events") === null) {
-            return;
-        }
-        eventsArr.push(...JSON.parse(localStorage.getItem("events")));
-    }
-    */
 
     function convertTime(time) {
         let timeArr = time.split(":");
