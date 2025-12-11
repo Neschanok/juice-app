@@ -43,7 +43,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
     async function loadEventsFromDB() {
         try {
-            const response = await fetch("http://localhost:6005/events");
+            const response = await fetch("http://localhost:5500/events");
             const events = await response.json();
 
             eventsArr = [];
