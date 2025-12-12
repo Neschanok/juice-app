@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Copenhagen Tours | Storefront</title>
+
+  <link rel="stylesheet" href="./styles.css" />
+  <script src="https://kit.fontawesome.com/bd587e2beb.js" crossorigin="anonymous"></script>
+</head>
+
+<body class="salg">
+
+  <!-- BURGER MENU -->
+  <button class="menu-toggle" id="menuToggle">
+    <i class="fa-solid fa-bars"></i>
+  </button>
+
+  <div class="home-layout">
+
+    <!-- SIDEBAR -->
+    <section class="menu">
+      <header class="overskrift">
+<h2 style="margin-left: 37px;">Understory</h2>
+      </header>
+
+      <nav class="menu-links">
+        <h3 onclick="location.href='home.html'"><i class="fa-regular fa-house"></i> Home</h3>
+        <h3 onclick="location.href='calender.html'"><i class="fa-regular fa-calendar"></i> Kalender</h3>
+        <h3 onclick="location.href='oplevelser.html'"><i class="fa-solid fa-ticket"></i> Oplevelser</h3>
+        <h3 onclick="location.href='sales.html'"><i class="fa-solid fa-receipt"></i> Salg</h3>
+        <h3 class="active" onclick="location.href='storefront.html'"><i class="fa-solid fa-store"></i> Storefront</h3>
+        <h3 onclick="location.href='chat.html'"><i class="fa-regular fa-comments"></i> Chat</h3>
+      </nav>
+
+      <button id="logoutBtn" class="btn secondary logout-btn">
+        <i class="fa-solid fa-right-from-bracket"></i> Log ud
+      </button>
+    </section>
+
+    <!-- STOREFRONT INDHOLD -->
+    <main>
+      <header class="storefront-header">
+        <div class="storefront-logo">
+          <span class="logo-circle">CT</span>
+          <div class="logo-text">
+            <h1>Copenhagen Tours</h1>
+            <p>Experiences in Copenhagen</p>
+          </div>
+        </div>
+      </header>
+
+      <section class="storefront-hero">
+        <div class="hero-text">
+          <h2>Discover Copenhagen by sea, land & taste</h2>
+          <p>Browse upcoming dates and curated experiences your guests can book instantly.</p>
+        </div>
+      </section>
+
+      <section class="storefront-section">
+        <div class="section-header">
+          <h3>Upcoming dates</h3>
+        </div>
+        <div id="upcomingGrid" class="storefront-grid cards-upcoming"></div>
+      </section>
+
+      <section class="storefront-section">
+        <div class="section-header">
+          <h3>Explore our offerings</h3>
+        </div>
+
+        <div id="filterBar" class="storefront-filter-bar"></div>
+        <div id="allGrid" class="storefront-grid cards-all"></div>
+      </section>
+
+      <footer class="storefront-footer">
+        <p>© <span id="yearSpan"></span> Copenhagen Tours · Powered by Understory</p>
+      </footer>
+    </main>
+  </div>
+
+  <!-- BURGER SCRIPT -->
+  <script>
+    const menu = document.querySelector('.menu');
+    const toggle = document.getElementById('menuToggle');
+
+    if (menu && toggle) {
+      toggle.addEventListener('click', () => {
+        menu.classList.toggle('collapsed');
+        document.body.classList.toggle('menu-collapsed');
+      });
+    }
+  </script>
+
+  <!-- STOREFRONT SCRIPT -->
+  <script>
+    function getExperiences() {
+      return JSON.parse(localStorage.getItem("experiences")) || [];
+    }
+
+    const upcomingGrid = document.getElementById("upcomingGrid");
+    const allGrid = document.getElementById("allGrid");
+    const filterBar = document.getElementById("filterBar");
+
+    let currentFilter = "Alle";
+
+    function renderFilterButtons(experiences) {
+      const categories = [...new Set(experiences.map(exp => exp.category).filter(Boolean))];
+      filterBar.innerHTML = "";
+
+      const allBtn = document.createElement("button");
+      allBtn.textContent = "Alle";
+      allBtn.className = "storefront-filter-btn active";
+      allBtn.onclick = () => {
+        currentFilter = "Alle";
+        renderAllGrid(experiences);
+      };
+      filterBar.appendChild(allBtn);
+
+      categories.forEach(cat => {
+        const btn = document.createElement("button");
+        btn.textContent = cat;
+        btn.className = "storefront-filter-btn";
+        btn.onclick = () => {
+          currentFilter = cat;
+          renderAllGrid(experiences);
+        };
+        filterBar.appendChild(btn);
+      });
+    }
+
+    function createCard(exp) {
+      const card = document.createElement("article");
+      card.classList.add("storefront-card");
+
+      card.innerHTML = `
+        <img src="${exp.image}">
+        <h4>${exp.title}</h4>
+        <p>${exp.location}</p>
+        <p>${exp.price} kr.</p>
+        <div>
+          <button class="btn secondary">Read more</button>
+          <button class="btn primary">Book</button>
+        </div>
+      `;
+
+      return card;
+    }
+
+    function renderUpcomingGrid(experiences) {
+      upcomingGrid.innerHTML = "";
+      experiences.slice(0, 3).forEach(exp => upcomingGrid.appendChild(createCard(exp)));
+    }
+
+    function renderAllGrid(experiences) {
+      allGrid.innerHTML = "";
+
+      const filtered = currentFilter === "Alle"
+        ? experiences
+        : experiences.filter(exp => exp.category === currentFilter);
+
+      filtered.forEach(exp => {
+        allGrid.appendChild(createCard(exp));
+      });
+    }
+
+    function initStorefront() {
+      const experiences = getExperiences();
+      renderUpcomingGrid(experiences);
+      renderFilterButtons(experiences);
+      renderAllGrid(experiences);
+      document.getElementById("yearSpan").textContent = new Date().getFullYear();
+    }
+
+    initStorefront();
+  </script>
+
+  <!-- FIREBASE -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.3.1/firebase-app.js";
+    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.3.1/firebase-auth.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyAps2Jve2RE3InZyo_q9MTJ0JtKffDNe1E",
+      authDomain: "understorychat.firebaseapp.com",
+      projectId: "understorychat",
+      storageBucket: "understorychat.firebasestorage.app",
+      messagingSenderId: "1037413097995",
+      appId: "1:1037413097995:web:ddde8b7775db96650e9d0e",
+      measurementId: "G-T4SCFB2SZ5"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    onAuthStateChanged(auth, (user) => {
+      if (!user) window.location.href = "./index.html";
+    });
+
+    document.getElementById("logoutBtn").addEventListener("click", async () => {
+      await signOut(auth);
+      window.location.href = "./index.html";
+    });
+  </script>
+
+</body>
+</html>

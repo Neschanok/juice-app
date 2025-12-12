@@ -10,22 +10,24 @@
 </head>
 
 <body class="salg">
+  <!-- BURGER -->
   <button class="menu-toggle" id="menuToggle">
     <i class="fa-solid fa-bars"></i>
   </button>
+
   <div class="home-layout">
+    <!-- SIDEBAR (fælles) -->
     <section class="menu">
       <header class="overskrift">
-        <h2>Understory</h2>
+        <h2 style="margin-left: 37px;">Understory</h2>
       </header>
 
       <nav class="menu-links">
-        <h3 onclick="location.href='home.html'"><i class="fa-regular fa-house"></i> Home</h3>
+        <h3 class="active" onclick="location.href='home.html'"><i class="fa-regular fa-house"></i> Home</h3>
         <h3 onclick="location.href='calender.html'"><i class="fa-regular fa-calendar"></i> Kalender</h3>
         <h3 onclick="location.href='oplevelser.html'"><i class="fa-solid fa-ticket"></i> Oplevelser</h3>
         <h3 onclick="location.href='sales.html'"><i class="fa-solid fa-receipt"></i> Salg</h3>
-        <h3><i class="fa-solid fa-store"></i> Hjemmeside</h3>
-        <h3><i class="fa-solid fa-chart-line"></i> Udvikling</h3>
+        <h3 onclick="location.href='storefront.html'"><i class="fa-solid fa-store"></i> Storefront</h3>
         <h3 onclick="location.href='chat.html'"><i class="fa-regular fa-comments"></i> Chat</h3>
       </nav>
 
@@ -34,12 +36,38 @@
       </button>
     </section>
 
+    <!-- INDHOLD -->
     <main class="home-content">
       <h1>Velkommen!</h1>
       <p>Du er logget ind. Dette er Understorys interne dashboard.</p>
+
+      <hr>
+
+      <h2>Opret ny oplevelse</h2>
+
+      <form id="experienceForm" class="experience-form">
+        <input type="text" id="title" placeholder="Titel" required>
+        <input type="text" id="location" placeholder="Lokation" required>
+        <input type="number" id="price" placeholder="Pris" required>
+        <input type="text" id="image" placeholder="Billede URL" required>
+
+        <select id="category" required>
+          <option value="">Vælg kategori</option>
+          <option value="Kanalrundfart">Kanalrundfart</option>
+          <option value="Byvandring">Byvandring</option>
+          <option value="Madoplevelse">Madoplevelse</option>
+        </select>
+
+        <button class="btn" type="submit">Opret oplevelse</button>
+      </form>
+
+      <h2>Oprettede oplevelser</h2>
+      <div id="experienceList"></div>
+
     </main>
   </div>
 
+  <!-- BURGER SCRIPT (fælles) -->
   <script>
     const menu = document.querySelector('.menu');
     const toggle = document.getElementById('menuToggle');
@@ -51,7 +79,7 @@
     }
   </script>
 
-  <!-- Firebase logout -->
+  <!-- FIREBASE LOGOUT -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.3.1/firebase-app.js";
     import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.3.1/firebase-auth.js";
@@ -69,16 +97,85 @@
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
 
-    // Hvis ikke logget ind → tilbage til index.html
     onAuthStateChanged(auth, (user) => {
       if (!user) window.location.href = "./index.html";
     });
 
-    // Log ud
     document.getElementById("logoutBtn").addEventListener("click", async () => {
       await signOut(auth);
       window.location.href = "./index.html";
     });
   </script>
+
+  <!-- OPLEVELSER LOCALSTORAGE -->
+  <script>
+    const form = document.getElementById("experienceForm");
+    const experienceList = document.getElementById("experienceList");
+
+    // Hent inputs ÉN gang
+    const titleInput = document.getElementById("title");
+    const locationInput = document.getElementById("location");
+    const priceInput = document.getElementById("price");
+    const imageInput = document.getElementById("image");
+    const categorySelect = document.getElementById("category");
+
+    function getExperiences() {
+      return JSON.parse(localStorage.getItem("experiences")) || [];
+    }
+
+    function saveExperiences(data) {
+      localStorage.setItem("experiences", JSON.stringify(data));
+    }
+
+    function renderExperiences() {
+      const experiences = getExperiences();
+      experienceList.innerHTML = "";
+
+      experiences.forEach((exp, index) => {
+        const div = document.createElement("div");
+        div.classList.add("experience-card");
+
+        div.innerHTML = `
+          <img src="${exp.image}" width="120">
+          <h3>${exp.title}</h3>
+          <p>${exp.location}</p>
+          <p>${exp.price} kr.</p>
+          <p>${exp.category}</p>
+          <button onclick="deleteExperience(${index})">Slet</button>
+        `;
+
+        experienceList.appendChild(div);
+      });
+    }
+
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+
+      const newExperience = {
+        title: titleInput.value,
+        location: locationInput.value,   // ← nu fra input-feltet, ikke window.location
+        price: priceInput.value,
+        image: imageInput.value,
+        category: categorySelect.value
+      };
+
+      const experiences = getExperiences();
+      experiences.push(newExperience);
+      saveExperiences(experiences);
+
+      form.reset();
+      renderExperiences();
+    });
+
+    function deleteExperience(index) {
+      const experiences = getExperiences();
+      experiences.splice(index, 1);
+      saveExperiences(experiences);
+      renderExperiences();
+    }
+
+    renderExperiences();
+  </script>
+
 </body>
 </html>

@@ -29,7 +29,6 @@
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
 
-    /* ---------------- GLOBAL CHAT VARS ---------------- */
     let conversationsClient = null;
     let activeConversation = null;
     let currentIdentity = null;
@@ -37,7 +36,6 @@
 
     const CONVERSATION_NAME = "understory-global-chat";
 
-    /* ---------------- UI HELPERS ---------------- */
     function appendMessage(type, author, body) {
       const msgBox = document.getElementById("messages");
       const div = document.createElement("div");
@@ -74,7 +72,6 @@
       container.scrollTop = container.scrollHeight;
     }
 
-    /* ---------------- SERVER TOKEN ---------------- */
     async function getTwilioToken(identity) {
       const res = await fetch("/twilio-token", {
         method: "POST",
@@ -86,7 +83,6 @@
       return res.json();
     }
 
-    /* ---------------- LOAD HISTORY ---------------- */
     async function loadExistingMessages(convo) {
       try {
         const page = await convo.getMessages(50);
@@ -97,7 +93,6 @@
       }
     }
 
-    /* ---------------- SETUP CONVERSATION ---------------- */
     async function setupConversation() {
       if (isConversationReady) return;
 
@@ -109,10 +104,8 @@
 
         await loadExistingMessages(convo);
 
-        // Join hvis ikke allerede medlem
         try { await convo.join(); } catch (_) {}
 
-        // Lyt efter beskeder
         convo.on("messageAdded", msg => {
           appendMessage("chat", msg.author, msg.body);
         });
@@ -123,7 +116,6 @@
       }
     }
 
-    /* ---------------- INIT TWILIO ---------------- */
     async function initTwilioForIdentity(identity) {
       currentIdentity = identity;
       appendMessage("system", "", "Forbinder til Twilio...");
@@ -140,7 +132,6 @@
       });
     }
 
-    /* ---------------- SEND MESSAGE ---------------- */
     async function sendMessage() {
       const input = document.getElementById("messageInput");
       const text = input.value.trim();
@@ -155,7 +146,6 @@
       input.value = "";
     }
 
-    /* ---------------- DOM READY ---------------- */
     window.addEventListener("DOMContentLoaded", () => {
       document.getElementById("sendBtn").onclick = sendMessage;
 
@@ -172,7 +162,6 @@
       });
     });
 
-    /* ---------------- FIREBASE LOGIN FLOW ---------------- */
     onAuthStateChanged(auth, user => {
       if (!user) return (window.location.href = "index.html");
 
@@ -185,46 +174,60 @@
 </head>
 
 <body class="salg">
-<div class="home-layout">
+  <!-- BURGER -->
+  <button class="menu-toggle" id="menuToggle">
+    <i class="fa-solid fa-bars"></i>
+  </button>
 
-  <!-- SIDEBAR -->
-  <section class="menu">
-    <header class="overskrift">
-      <h2>Understory</h2>
-    </header>
+  <div class="home-layout">
+    <!-- SIDEBAR -->
+    <section class="menu">
+      <header class="overskrift">
+<h2 style="margin-left: 37px;">Understory</h2>
+      </header>
 
-    <nav class="menu-links">
-      <h3 onclick="location.href='home.html'"><i class="fa-regular fa-house"></i> Home</h3>
-      <h3 onclick="location.href='calender.html'"><i class="fa-regular fa-calendar"></i> Kalender</h3>
-      <h3 onclick="location.href='oplevelser.html'"><i class="fa-solid fa-ticket"></i> Oplevelser</h3>
-      <h3 onclick="location.href='sales.html'"><i class="fa-solid fa-receipt"></i> Salg</h3>
-      <h3><i class="fa-solid fa-store"></i> Hjemmeside</h3>
-      <h3><i class="fa-solid fa-chart-line"></i> Udvikling</h3>
-      <h3 class="active" onclick="location.href='chat.html'"><i class="fa-regular fa-comments"></i> Chat</h3>
-    </nav>
+      <nav class="menu-links">
+        <h3 onclick="location.href='home.html'"><i class="fa-regular fa-house"></i> Home</h3>
+        <h3 onclick="location.href='calender.html'"><i class="fa-regular fa-calendar"></i> Kalender</h3>
+        <h3 onclick="location.href='oplevelser.html'"><i class="fa-solid fa-ticket"></i> Oplevelser</h3>
+        <h3 onclick="location.href='sales.html'"><i class="fa-solid fa-receipt"></i> Salg</h3>
+        <h3 onclick="location.href='storefront.html'"><i class="fa-solid fa-store"></i> Storefront</h3>
+        <h3 class="active" onclick="location.href='chat.html'"><i class="fa-regular fa-comments"></i> Chat</h3>
+      </nav>
 
-    <button id="logoutBtn" class="btn secondary logout-btn">
-      <i class="fa-solid fa-right-from-bracket"></i> Log ud
-    </button>
-  </section>
+      <button id="logoutBtn" class="btn secondary logout-btn">
+        <i class="fa-solid fa-right-from-bracket"></i> Log ud
+      </button>
+    </section>
 
-  <!-- CHAT MAIN -->
-  <main style="flex:1;">
-    <div class="chat-wrapper">
-      <div class="chat-header">
-        <h2>Understory chat</h2>
-        <span id="userInfo" style="font-size:12px; color:#9ca3af;"></span>
+    <!-- CHAT MAIN -->
+    <main style="flex:1;">
+      <div class="chat-wrapper">
+        <div class="chat-header">
+          <h2>Understory chat</h2>
+          <span id="userInfo" style="font-size:12px; color:#9ca3af;"></span>
+        </div>
+
+        <div id="messages" class="chat-messages"></div>
+
+        <div class="chat-input-row">
+          <input id="messageInput" placeholder="Skriv en besked..." />
+          <button id="sendBtn">Send</button>
+        </div>
       </div>
+    </main>
+  </div>
 
-      <div id="messages" class="chat-messages"></div>
-
-      <div class="chat-input-row">
-        <input id="messageInput" placeholder="Skriv en besked..." />
-        <button id="sendBtn">Send</button>
-      </div>
-    </div>
-  </main>
-
-</div>
+  <!-- BURGER SCRIPT -->
+  <script>
+    const menu = document.querySelector('.menu');
+    const toggle = document.getElementById('menuToggle');
+    if (menu && toggle) {
+      toggle.addEventListener('click', () => {
+        menu.classList.toggle('collapsed');
+        document.body.classList.toggle('menu-collapsed');
+      });
+    }
+  </script>
 </body>
 </html>

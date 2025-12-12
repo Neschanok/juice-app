@@ -8,192 +8,232 @@
     <script src="https://kit.fontawesome.com/bd587e2beb.js" crossorigin="anonymous"></script>
 </head>
 <body class="salg">
-<button class="menu-toggle" id="menuToggle">
-  <i class="fa-solid fa-bars"></i>
-</button>
-<div class="container">
-    
+  <!-- BURGER-KNAP -->
+  <button class="menu-toggle" id="menuToggle">
+    <i class="fa-solid fa-bars"></i>
+  </button>
+
+  <div class="container">
+    <!-- SIDEBAR -->
     <section class="menu">
-        <header class="overskrift-logo">
-            <img src="billeder\understorylogo.png" alt="Logo for Understory">
-        </header>
-        <nav class="menu-links">
-      <h3 onclick="location.href='home.html'"><i class="fa-regular fa-house"></i> Home</h3>
-      <h3 onclick="location.href='calender.html'"><i class="fa-regular fa-calendar"></i> Kalender</h3>
-      <h3 onclick="location.href='oplevelser.html'"><i class="fa-solid fa-ticket"></i> Oplevelser</h3>
-      <h3 onclick="location.href='sales.html'"><i class="fa-solid fa-receipt"></i> Salg</h3>
-      <h3><i class="fa-solid fa-store"></i> Hjemmeside</h3>
-      <h3><i class="fa-solid fa-chart-line"></i> Udvikling</h3>
-      <h3 class="active" onclick="location.href='chat.html'"><i class="fa-regular fa-comments"></i> Chat</h3>
-    </nav>
+      <header class="overskrift-logo">
+<h3 style="margin-left: 37px;">Understory</h3>
+    </header>
+
+      <nav class="menu-links">
+        <h3 onclick="location.href='home.html'">
+          <i class="fa-regular fa-house"></i> Home
+        </h3>
+        <h3 onclick="location.href='calender.html'">
+          <i class="fa-regular fa-calendar"></i> Kalender
+        </h3>
+        <h3 class="active" onclick="location.href='oplevelser.html'">
+          <i class="fa-solid fa-ticket"></i> Oplevelser
+        </h3>
+        <h3 onclick="location.href='sales.html'">
+          <i class="fa-solid fa-receipt"></i> Salg
+        </h3>
+        <h3 onclick="location.href='storefront.html'">
+          <i class="fa-solid fa-store"></i> Storefront
+        </h3>
+        <h3 onclick="location.href='chat.html'">
+          <i class="fa-regular fa-comments"></i> Chat
+        </h3>
+      </nav>
+
+      <!-- LOG UD-KNAP (manglede før) -->
+      <button id="logoutBtn" class="btn secondary logout-btn">
+        <i class="fa-solid fa-right-from-bracket"></i> Log ud
+      </button>
     </section>
 
+    <!-- INDHOLD -->
     <div class="indholdoverskrift">
-        <h2>Oplevelser</h2>
+      <h2>Oplevelser</h2>
     </div>
 
     <div class="tab">
-        <button class="tablinks" onclick="openOplevelser(event, 'Live')">LIVE</button>
-        <button class="tablinks" onclick="openOplevelser(event, 'Arkiveret')">ARKIVERET</button>
+      <button class="tablinks" onclick="openOplevelser(event, 'Live')">LIVE</button>
+      <button class="tablinks" onclick="openOplevelser(event, 'Arkiveret')">ARKIVERET</button>
 
-        <div id="Live" class="tabcontent">
-            <div class="oplevelse-item">
-                <a target="_blank" href="billeder\kayaktour.jpg">
-                    <img src="billeder\kayaktour.jpg" alt="Kayak Tour" width="300" height="200">
-                </a>
-                <div class="oplevelse-info">
-                    <div class="oplevelse">Kayak Tour</div>
-                    <div class="beskrivelse">Oplev Danmark fra vandet med en guidet kayak tour. Med denne tur kan du ro langs bredden i en single kayak for at beundre den smukke kyst og fjord.</div>
-                </div>
+      <div id="Live" class="tabcontent">
+        <div class="oplevelse-item">
+          <a target="_blank" href="billeder\kayaktour.jpg">
+            <img src="billeder\kayaktour.jpg" alt="Kayak Tour" width="300" height="200">
+          </a>
+          <div class="oplevelse-info">
+            <div class="oplevelse">Kayak Tour</div>
+            <div class="beskrivelse">
+              Oplev Danmark fra vandet med en guidet kayak tour. Med denne tur kan du ro langs bredden i en single kayak for at beundre den smukke kyst og fjord.
             </div>
-
-            <div class="oplevelse-item">
-                <a target="_blank" href="billeder\water yoga.jpg">
-                    <img src="billeder\water yoga.jpg" alt="Water Yoga" width="300" height="200">
-                </a>
-                <div class="oplevelse-info">
-                    <div class="oplevelse">Aqua Yoga</div>
-                    <div class="beskrivelse">Introducer din krop for denne milde form for yoga, hvor alle øvelser bliver udført og øvet i vandet. Aqua Yoga bliver udført i Vesterbro Svømmehal. Vi vil udfordre kroppen med stillinger som blandt andet halvmånen, håndstand, opadgående hund, båd- og storetå-stillingen.</div>
-                </div>
-            </div>
-
-            <div class="oplevelse-item">
-                <a target="_blank" href="billeder\wakeboarding.jpg">
-                    <img src="billeder\wakeboarding.jpg" alt="Wakeboarding" width="300" height="200">
-                </a>
-                <div class="oplevelse-info">
-                    <div class="oplevelse">Wakeboarding</div>
-                    <div class="beskrivelse">Prøv den udfordrende og unikke mulighed for at stå på wakeboard efter en båd! Ingen erfaring påkrævet for vi tilbyder både vejledning og rådgivning fra vores erfarne intruktører.</div>
-                </div>
-            </div>
-
-            <div class="oplevelse-item">
-                <a target="_blank" href="billeder\treetop.jpg">
-                    <img src="billeder\treetop.jpg" alt="Treetop Adventure" width="300" height="200">
-                </a>
-                <div class="oplevelse">Treetop Adventure</div>
-            </div>
-
-            <div class="oplevelse-item">
-                <a target="_blank" href="billeder\Mountainbike.jpeg">
-                    <img src="billeder\Mountainbike.jpg" alt="Mountainbike" width="300" height="200">
-                </a>
-                <div class="oplevelse">Mountainbike</div>
-            </div>
-
-            <div class="oplevelse-item">
-                <a target="_blank" href="billeder\CampingTrip.jpeg">
-                    <img src="billeder\Camping.jpg" alt="Camping Trip" width="300" height="200">
-                </a>
-                <div class="oplevelse">Camping Trip</div>
-            </div>
-
-            <div class="oplevelse-item">
-                <a target="_blank" href="billeder\SUP.jpg">
-                    <img src="billeder\SUP.jpg" alt="SUP" width="300" height="200">
-                </a>
-                <div class="oplevelse">SUP</div>
-            </div>
-
-            <div class="oplevelse-item">
-                <a target="_blank" href="billeder\Climbing.jpg">
-                    <img src="billeder\Climbing.jpg" alt="Climbing" width="300" height="200">
-                </a>
-                <div class="oplevelse">Climbing</div>
-            </div>
-
-            <div class="oplevelse-item">
-                <a target="_blank" href="billeder\TrailRun.jpeg">
-                    <img src="billeder\Trailrun.jpg" alt="Trail Run" width="300" height="200">
-                </a>
-                <div class="oplevelse">Trail Run</div>
-            </div>
-
-            <div class="oplevelse-item">
-                <a target="_blank" href="billeder\OutdoorYoga.jpeg">
-                    <img src="billeder\OutdoorYoga.jpg" alt="Outdoor Yoga" width="300" height="200">
-                </a>
-                <div class="oplevelse">Outdoor Yoga</div>
-            </div>
-
-            <div class="oplevelse-item">
-                <a target="_blank" href="billeder\KayakCamping.jpeg">
-                    <img src="billeder\KayakCamping.jpg" alt="Kayak Camping" width="300" height="200">
-                </a>
-                <div class="oplevelse">Kayak Camping</div>
-            </div>
-
-            <div class="oplevelse-item">
-                <a target="_blank" href="billeder\NightHike.jpeg">
-                    <img src="billeder\NightHike.jpeg" alt="Night Hike" width="300" height="200">
-                </a>
-                <div class="oplevelse">Night Hike</div>
-            </div>
-        </div>
-    
-        <div id="Arkiveret" class="tabcontent">
-            <div class="oplevelse-item">
-                <a target="_blank" href="billeder\Bungyjump.jpg">
-                    <img src="billeder\Bungyjump.jpg" alt="Bungyjump Copenhagen" width="300" height="200">
-                </a>
-                <div class="oplevelse">Bungyjump Copenhagen</div>
-            </div>
-
-            <div class="oplevelse-item">
-                <a target="_blank" href="billeder\river rafting.jpg">
-                    <img src="billeder\river rafting.jpg" alt="River Rafting" width="300" height="200">
-                </a>
-                <div class="oplevelse">River Rafting</div>
-            </div>
+          </div>
         </div>
 
-        <script>
-            function openOplevelser(evt, valgAfOplevelse) {
-                var i, tabcontent, tablinks;
-
-                tabcontent = document.getElementsByClassName("tabcontent");
-                for (i = 0; i < tabcontent.length; i++) {
-                    tabcontent[i].style.display = "none";
-                }
-
-                tablinks = document.getElementsByClassName("tablinks");
-                for (i = 0; i < tablinks.length; i++) {
-                    tablinks[i].classList.remove("active");
-                }
-
-                document.getElementById(valgAfOplevelse).style.display = "block";
-                evt.currentTarget.classList.add("active");
-
-            }
-
-                document.getElementById("Live").style.display = "block";
-                document.querySelector(".tablinks").classList.add("active");
-        </script>
+        <div class="oplevelse-item">
+          <a target="_blank" href="billeder\water yoga.jpg">
+            <img src="billeder\water yoga.jpg" alt="Water Yoga" width="300" height="200">
+          </a>
+          <div class="oplevelse-info">
+            <div class="oplevelse">Aqua Yoga</div>
+            <div class="beskrivelse">
+              Introducer din krop for denne milde form for yoga, hvor alle øvelser bliver udført og øvet i vandet. Aqua Yoga bliver udført i Vesterbro Svømmehal. Vi vil udfordre kroppen med stillinger som blandt andet halvmånen, håndstand, opadgående hund, båd- og storetå-stillingen.
+            </div>
+          </div>
         </div>
+
+        <div class="oplevelse-item">
+          <a target="_blank" href="billeder\wakeboarding.jpg">
+            <img src="billeder\wakeboarding.jpg" alt="Wakeboarding" width="300" height="200">
+          </a>
+          <div class="oplevelse-info">
+            <div class="oplevelse">Wakeboarding</div>
+            <div class="beskrivelse">
+              Prøv den udfordrende og unikke mulighed for at stå på wakeboard efter en båd! Ingen erfaring påkrævet for vi tilbyder både vejledning og rådgivning fra vores erfarne intruktører.
+            </div>
+          </div>
+        </div>
+
+        <div class="oplevelse-item">
+          <a target="_blank" href="billeder\treetop.jpg">
+            <img src="billeder\treetop.jpg" alt="Treetop Adventure" width="300" height="200">
+          </a>
+          <div class="oplevelse">Treetop Adventure</div>
+        </div>
+
+        <div class="oplevelse-item">
+          <a target="_blank" href="billeder\Mountainbike.jpeg">
+            <img src="billeder\Mountainbike.jpg" alt="Mountainbike" width="300" height="200">
+          </a>
+          <div class="oplevelse">Mountainbike</div>
+        </div>
+
+        <div class="oplevelse-item">
+          <a target="_blank" href="billeder\CampingTrip.jpeg">
+            <img src="billeder\Camping.jpg" alt="Camping Trip" width="300" height="200">
+          </a>
+          <div class="oplevelse">Camping Trip</div>
+        </div>
+
+        <div class="oplevelse-item">
+          <a target="_blank" href="billeder\SUP.jpg">
+            <img src="billeder\SUP.jpg" alt="SUP" width="300" height="200">
+          </a>
+          <div class="oplevelse">SUP</div>
+        </div>
+
+        <div class="oplevelse-item">
+          <a target="_blank" href="billeder\Climbing.jpg">
+            <img src="billeder\Climbing.jpg" alt="Climbing" width="300" height="200">
+          </a>
+          <div class="oplevelse">Climbing</div>
+        </div>
+
+        <div class="oplevelse-item">
+          <a target="_blank" href="billeder\TrailRun.jpeg">
+            <img src="billeder\Trailrun.jpg" alt="Trail Run" width="300" height="200">
+          </a>
+          <div class="oplevelse">Trail Run</div>
+        </div>
+
+        <div class="oplevelse-item">
+          <a target="_blank" href="billeder\OutdoorYoga.jpeg">
+            <img src="billeder\OutdoorYoga.jpg" alt="Outdoor Yoga" width="300" height="200">
+          </a>
+          <div class="oplevelse">Outdoor Yoga</div>
+        </div>
+
+        <div class="oplevelse-item">
+          <a target="_blank" href="billeder\KayakCamping.jpeg">
+            <img src="billeder\KayakCamping.jpg" alt="Kayak Camping" width="300" height="200">
+          </a>
+          <div class="oplevelse">Kayak Camping</div>
+        </div>
+
+        <div class="oplevelse-item">
+          <a target="_blank" href="billeder\NightHike.jpeg">
+            <img src="billeder\NightHike.jpeg" alt="Night Hike" width="300" height="200">
+          </a>
+          <div class="oplevelse">Night Hike</div>
+        </div>
+      </div>
+  
+      <div id="Arkiveret" class="tabcontent">
+        <div class="oplevelse-item">
+          <a target="_blank" href="billeder\Bungyjump.jpg">
+            <img src="billeder\Bungyjump.jpg" alt="Bungyjump Copenhagen" width="300" height="200">
+          </a>
+          <div class="oplevelse">Bungyjump Copenhagen</div>
+        </div>
+
+        <div class="oplevelse-item">
+          <a target="_blank" href="billeder\river rafting.jpg">
+            <img src="billeder\river rafting.jpg" alt="River Rafting" width="300" height="200">
+          </a>
+          <div class="oplevelse">River Rafting</div>
+        </div>
+      </div>
+
+      <script>
+        function openOplevelser(evt, valgAfOplevelse) {
+          var i, tabcontent, tablinks;
+
+          tabcontent = document.getElementsByClassName("tabcontent");
+          for (i = 0; i < tabcontent.length; i++) {
+            tabcontent[i].style.display = "none";
+          }
+
+          tablinks = document.getElementsByClassName("tablinks");
+          for (i = 0; i < tablinks.length; i++) {
+            tablinks[i].classList.remove("active");
+          }
+
+          document.getElementById(valgAfOplevelse).style.display = "block";
+          evt.currentTarget.classList.add("active");
+        }
+
+        // Standard: vis LIVE + marker første tab som aktiv
+        document.addEventListener("DOMContentLoaded", () => {
+          document.getElementById("Live").style.display = "block";
+          document.querySelector(".tablinks").classList.add("active");
+        });
+      </script>
     </div>
-    <script type="module">
+  </div>
+
+  <!-- BURGER-SCRIPT TIL SIDEBAR -->
+  <script>
+    const menu = document.querySelector('.menu');
+    const toggle = document.getElementById('menuToggle');
+    if (menu && toggle) {
+      toggle.addEventListener('click', () => {
+        menu.classList.toggle('collapsed');
+        document.body.classList.toggle('menu-collapsed');
+      });
+    }
+  </script>
+
+  <!-- FIREBASE-LOGIK -->
+  <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.3.1/firebase-app.js";
     import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.3.1/firebase-auth.js";
 
     const firebaseConfig = {
-   apiKey: "AIzaSyAps2Jve2RE3InZyo_q9MTJ0JtKffDNe1E",
-    authDomain: "understorychat.firebaseapp.com",
-    projectId: "understorychat",
-    storageBucket: "understorychat.firebasestorage.app",
-    messagingSenderId: "1037413097995",
-    appId: "1:1037413097995:web:ddde8b7775db96650e9d0e",
-    measurementId: "G-T4SCFB2SZ5"
+      apiKey: "AIzaSyAps2Jve2RE3InZyo_q9MTJ0JtKffDNe1E",
+      authDomain: "understorychat.firebaseapp.com",
+      projectId: "understorychat",
+      storageBucket: "understorychat.firebasestorage.app",
+      messagingSenderId: "1037413097995",
+      appId: "1:1037413097995:web:ddde8b7775db96650e9d0e",
+      measurementId: "G-T4SCFB2SZ5"
     };
 
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
 
-    // Hvis ikke logget ind → tilbage til index.html
     onAuthStateChanged(auth, (user) => {
       if (!user) window.location.href = "./index.html";
     });
 
-    // Log ud
     document.getElementById("logoutBtn").addEventListener("click", async () => {
       await signOut(auth);
       window.location.href = "./index.html";
